@@ -5,7 +5,7 @@ const App = () => {
     <div className="h-screen w-screen p-5 bg-gray-900">
       {/* logo and search bar  */}
       <div className="flex flex-col items-center gap-5">
-        <h1 className="text-3xl font-semibold text-white">
+        <h1 className="text-4xl font-bold text-white">
           Movie<span className="text-yellow-400">Nest</span>
         </h1>
         <div className="flex items-center w-fit h-10 px-3 rounded-full bg-white">
