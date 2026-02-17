@@ -1,23 +1,20 @@
-import { CircleX, Search } from "lucide-react";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Trending from "./pages/Trending";
+import Popular from "./pages/Popular";
+import TopRated from "./pages/TopRated";
+import Header from "./components/Header";
 
 const App = () => {
   return (
-    <div className="h-screen w-screen p-5 bg-gray-900">
-      {/* logo and search bar  */}
-      <div className="flex flex-col items-center gap-5">
-        <h1 className="text-4xl font-bold text-white">
-          Movie<span className="text-yellow-400">Nest</span>
-        </h1>
-        <div className="flex items-center w-fit h-10 px-3 rounded-full bg-white">
-          <Search size={30} />
-          <input
-            className="outline-none border-none px-3 h-full text-xl"
-            type="text"
-            placeholder="Search for movies ..."
-          />
-          <CircleX size={30} />
-        </div>
-      </div>
+    <div className="h-screen w-screen p-5 bg-gray-900 flex flex-col gap-5">
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/trending" element={<Trending />} />
+        <Route path="/popular" element={<Popular />} />
+        <Route path="/top_rated" element={<TopRated />} />
+      </Routes>
     </div>
   );
 };
