@@ -29,7 +29,6 @@ const Header = () => {
           Top rated
         </Link>
       </nav>
-      {/* <NavBar /> */}
     </div>
   );
 };
