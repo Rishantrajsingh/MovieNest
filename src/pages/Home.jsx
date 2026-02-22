@@ -3,7 +3,17 @@ import MovieCard from "../components/MovieCard";
 const Home = (props) => {
   return (
     <div>
-      <MovieCard movies={props.movies} />
+      {props.movies.map((elem, idx) => {
+        return (
+          <div key={idx}>
+            <MovieCard
+              poster={elem.Poster}
+              title={elem.Title}
+              id={elem.imdbID}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };
