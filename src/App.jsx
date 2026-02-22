@@ -8,7 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const api = "http://www.omdbapi.com/?s=star wars&apikey=900e3577";
+  const api = "https://www.omdbapi.com/?s=star wars&apikey=900e3577";
 
   const [movies, setMovies] = useState([]);
   const [searchMovie, setSearchMovie] = useState();
