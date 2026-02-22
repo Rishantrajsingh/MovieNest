@@ -11,7 +11,7 @@ const App = () => {
   const api = "http://www.omdbapi.com/?s=star wars&apikey=900e3577";
 
   const [movies, setMovies] = useState([]);
-
+  const [searchMovie, setSearchMovie] = useState();
   useEffect(() => {
     const getMovies = async () => {
       try {
@@ -23,10 +23,10 @@ const App = () => {
       }
     };
     getMovies();
-  }, []);
+  }, [searchMovie]);
 
   return (
-    <div className="w-screen p-5 bg-gray-900 flex flex-col gap-5">
+    <div className="h-full w-screen p-5 bg-gray-900 flex flex-col gap-5">
       <Header />
       <Routes>
         <Route path="/" element={<Home movies={movies} />} />
