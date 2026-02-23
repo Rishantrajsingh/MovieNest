@@ -2,7 +2,7 @@ import MovieCard from "../components/MovieCard";
 
 const Home = (props) => {
   return (
-    <div>
+    <>
       {props.movies.map((elem, idx) => {
         return (
           <div key={idx}>
@@ -14,7 +14,7 @@ const Home = (props) => {
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
 

@@ -14,6 +14,9 @@ const App = () => {
 
   const url = `https://www.omdbapi.com/?s=${randomLetter}&page=${page}&apikey=900e3577`;
 
+  console.log(randomLetter);
+  console.log(page);
+
   // const url = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
 
   useEffect(() => {
