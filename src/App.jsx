@@ -1,8 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import Trending from "./pages/Trending";
-import Popular from "./pages/Popular";
-import TopRated from "./pages/TopRated";
 import Header from "./components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,7 +7,15 @@ import { useEffect, useState } from "react";
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
-  const url = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
+
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+  const page = Math.floor(Math.random() * 5) + 1;
+
+  const url = `https://www.omdbapi.com/?s=${randomLetter}&page=${page}&apikey=900e3577`;
+
+  // const url = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
+
   useEffect(() => {
     const getMovies = async () => {
       try {
@@ -29,9 +34,6 @@ const App = () => {
       <Header search={search} setSearch={setSearch} />
       <Routes>
         <Route path="/" element={<Home movies={movies} />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="/popular" element={<Popular />} />
-        <Route path="/top_rated" element={<TopRated />} />
       </Routes>
     </div>
   );
