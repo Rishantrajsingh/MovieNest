@@ -8,14 +8,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const api = "https://www.omdbapi.com/?s=star wars&apikey=900e3577";
-
   const [movies, setMovies] = useState([]);
-  const [searchMovie, setSearchMovie] = useState();
+  const [search, setSearch] = useState("");
+  const url = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const res = await axios.get(api);
+        const res = await axios.get(url);
         setMovies(res.data.Search);
         console.log(res.data.Search);
       } catch (error) {
@@ -23,11 +22,11 @@ const App = () => {
       }
     };
     getMovies();
-  }, [searchMovie]);
+  }, [search]);
 
   return (
     <div className="h-full w-screen p-5 bg-gray-900 flex flex-col gap-5">
-      <Header />
+      <Header search={search} setSearch={setSearch} />
       <Routes>
         <Route path="/" element={<Home movies={movies} />} />
         <Route path="/trending" element={<Trending />} />
