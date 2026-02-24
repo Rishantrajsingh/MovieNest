@@ -8,15 +8,22 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
 
-  const letters = "abcdefghijklmnopqrstuvwxyz";
-  const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-  const page = Math.floor(Math.random() * 5) + 1;
+  const words = [
+    "love",
+    "war",
+    "night",
+    "dark",
+    "life",
+    "king",
+    "ghost",
+    "star",
+    "fire",
+  ];
+  const randomWord = words[Math.floor(Math.random() * words.length)];
 
-  const url = `https://www.omdbapi.com/?s=${randomLetter}&page=${page}&apikey=900e3577`;
+  const url = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577`;
 
-  console.log(randomLetter);
-  console.log(page);
-
+  console.log(randomWord);
   // const url = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
 
   useEffect(() => {
