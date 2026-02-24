@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   const words = [
     "love",
@@ -24,50 +25,42 @@ const App = () => {
   const homeUrl = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577`;
   const searchUrl = `https://www.omdbapi.com/?s=${search}&apikey=900e3577`;
 
-  const homePage = async () => {
-    try {
-      const res = await axios.get(homeUrl);
-      setMovies(res.data.Search);
-      console.log(res.data.Search);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const homePage = async () => {
+      try {
+        const res = await axios.get(homeUrl);
+        setMovies(res.data.Search || []);
+        console.log(res.data.Search || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     homePage();
   }, []);
 
-  const searchApi = async () => {
-    try {
-      const res = await axios.get(searchUrl);
-      setMovies(res.data.Search);
-      console.log(res.data.Search);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const searchApi = async () => {
+      try {
+        if (isSearching && search !== "") {
+          const res = await axios.get(searchUrl);
+          setMovies(res.data.Search || []);
+          console.log(res.data.Search || []);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
     searchApi();
   }, [search]);
 
-  // useEffect(() => {
-  //   const getMovies = async () => {
-  //     try {
-  //       const res = await axios.get(searchUrl);
-  //       setMovies(res.data.Search);
-  //       console.log(res.data.Search);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   getMovies();
-  // }, [search]);
-
   return (
     <div className="h-full w-screen p-5 bg-gray-900 flex flex-col gap-5">
-      <Header search={search} setSearch={setSearch} />
+      <Header
+        isSearching={isSearching}
+        setIsSearching={setIsSearching}
+        search={search}
+        setSearch={setSearch}
+      />
       <Routes>
         <Route path="/" element={<Home movies={movies} />} />
       </Routes>
