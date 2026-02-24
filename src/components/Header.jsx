@@ -15,24 +15,13 @@ const Header = (props) => {
         <input
           value={props.search}
           onChange={(e) => {
-            e.setSearch(e.target.value);
+            setSearch(e.target.value);
           }}
           className="outline-none border-none px-3 h-full text-xl"
           type="text"
           placeholder="Search for movies ..."
         />
       </div>
-      <nav className="flex items-center justify-around w-full">
-        <Link className="text-white" to="/trending">
-          Trending
-        </Link>
-        <Link className="text-white" to="/popular">
-          Popular
-        </Link>
-        <Link className="text-white" to="/top_rated">
-          Top rated
-        </Link>
-      </nav>
     </div>
   );
 };

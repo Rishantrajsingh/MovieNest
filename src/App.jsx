@@ -21,23 +21,49 @@ const App = () => {
   ];
   const randomWord = words[Math.floor(Math.random() * words.length)];
 
-  const url = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577`;
+  const homeUrl = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577`;
+  const searchUrl = `https://www.omdbapi.com/?s=${search}&apikey=900e3577`;
 
-  console.log(randomWord);
-  // const url = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
+  const homePage = async () => {
+    try {
+      const res = await axios.get(homeUrl);
+      setMovies(res.data.Search);
+      console.log(res.data.Search);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const getMovies = async () => {
-      try {
-        const res = await axios.get(url);
-        setMovies(res.data.Search);
-        console.log(res.data.Search);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getMovies();
+    homePage();
+  }, []);
+
+  const searchApi = async () => {
+    try {
+      const res = await axios.get(searchUrl);
+      setMovies(res.data.Search);
+      console.log(res.data.Search);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    searchApi();
   }, [search]);
+
+  // useEffect(() => {
+  //   const getMovies = async () => {
+  //     try {
+  //       const res = await axios.get(searchUrl);
+  //       setMovies(res.data.Search);
+  //       console.log(res.data.Search);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getMovies();
+  // }, [search]);
 
   return (
     <div className="h-full w-screen p-5 bg-gray-900 flex flex-col gap-5">
