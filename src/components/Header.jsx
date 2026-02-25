@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 const Header = (props) => {
   return (
-    <div className="flex flex-col items-center gap-5">
+    <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-gray-900 w-full py-5 px-4">
       <Link to="/">
         <h1 className="text-4xl font-bold text-white">
           Movie<span className="text-yellow-400">Nest</span>
         </h1>
       </Link>
 
-      <div className="flex items-center w-fit h-10 px-3 rounded-full bg-white">
+      <div className="flex items-center w-full h-10 pl-3 rounded-full bg-white">
         <Search size={30} />
         <input
           value={props.search}
@@ -18,7 +18,7 @@ const Header = (props) => {
             props.setSearch(e.target.value);
             props.setIsSearching(true);
           }}
-          className="outline-none border-none px-3 h-full text-xl"
+          className="outline-none border-none px-3 w-full h-full text-xl rounded-full"
           type="text"
           placeholder="Search for movies ..."
         />

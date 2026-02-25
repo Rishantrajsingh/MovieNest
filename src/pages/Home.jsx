@@ -2,13 +2,10 @@ import MovieCard from "../components/MovieCard";
 
 const Home = (props) => {
   return (
-    <div className="grid grid-cols-2 place-items-center">
+    <div className="grid grid-cols-2 gap-5 place-items-center py-32">
       {props.movies.map((elem, idx) => {
         return (
-          <div
-            className="h-50 w-40 flex flex-col bg-blue-200 items-center"
-            key={idx}
-          >
+          <div key={idx}>
             <MovieCard
               poster={elem.Poster}
               title={elem.Title}

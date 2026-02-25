@@ -10,7 +10,7 @@ const App = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   const words = [
-    "love",
+    "danger",
     "war",
     "night",
     "dark",
@@ -54,7 +54,7 @@ const App = () => {
   }, [search]);
 
   return (
-    <div className="w-screen p-5 bg-gray-900 flex flex-col gap-5">
+    <div className="min-h-screen p-5 bg-gray-900 flex flex-col gap-5">
       <Header
         isSearching={isSearching}
         setIsSearching={setIsSearching}
