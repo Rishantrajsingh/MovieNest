@@ -8,7 +8,7 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-
+  const randomLetters = 0;
   const words = [
     "danger",
     "war",
