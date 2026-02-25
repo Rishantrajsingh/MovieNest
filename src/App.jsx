@@ -54,7 +54,7 @@ const App = () => {
   }, [search]);
 
   return (
-    <div className="h-full w-screen p-5 bg-gray-900 flex flex-col gap-5">
+    <div className="w-screen p-5 bg-gray-900 flex flex-col gap-5">
       <Header
         isSearching={isSearching}
         setIsSearching={setIsSearching}
