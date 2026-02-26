@@ -2,7 +2,7 @@ import MovieCard from "../components/MovieCard";
 
 const Home = (props) => {
   return (
-    <div className="grid grid-cols-2 gap-5 py-32 w-full bg-white">
+    <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
       {props.movies.map((elem, idx) => {
         return (
           <div key={idx}>
@@ -14,14 +14,6 @@ const Home = (props) => {
           </div>
         );
       })}
-      <div className="flex bg-red-400 items-center h-20 w-fit gap-15">
-        <button className="text-white bg-yellow-500 font-semibold rounded-xl h-fit w-fit px-7 py-3">
-          Prev
-        </button>
-        <button className="text-white bg-yellow-500 font-semibold rounded-xl h-fit w-fit px-7 py-3">
-          Next
-        </button>
-      </div>
     </div>
   );
 };

@@ -1,9 +1,9 @@
 const MovieCard = (props) => {
   return (
-    <div className="flex flex-col text-center items-center gap-2 w-full bg-red-300 ">
-      <div className="bg-pink-400 h-60 w-fit">
+    <div className="flex flex-col text-center items-center gap-2 w-full">
+      <div className="h-60 w-fit">
         <img
-          className="w-full h-60 object-cover"
+          className="w-full h-60 rounded"
           src={props.poster}
           alt={props.title}
         />

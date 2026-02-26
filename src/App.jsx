@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Header from "./components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Buttons from "./components/Buttons";
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -65,6 +66,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home movies={movies} />} />
       </Routes>
+      <Buttons />
     </div>
   );
 };
