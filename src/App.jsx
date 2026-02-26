@@ -11,21 +11,62 @@ const App = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   const words = [
-    "danger",
-    "war",
-    "night",
-    "dark",
-    "life",
-    "king",
-    "ghost",
-    "star",
-    "fire",
+    "Action",
+    "Adventure",
+    "Drama",
+    "Comedy",
+    "Thriller",
+    "Horror",
+    "Romance",
+    "Sci-Fi",
+    "Fantasy",
+    "Mystery",
+    "Crime",
+    "Animation",
+    "Biography",
+    "Documentary",
+    "Family",
+    "Musical",
+    "War",
+    "Western",
+    "Superhero",
+    "Psychological",
+    "Suspense",
+    "Dark",
+    "Emotional",
+    "Inspirational",
+    "Blockbuster",
+    "Indie",
+    "Classic",
+    "Cult",
+    "Epic",
+    "Romantic Comedy",
+    "Survival",
+    "Time Travel",
+    "Dystopian",
+    "Post-Apocalyptic",
+    "Based on True Story",
+    "Coming of Age",
+    "Revenge",
+    "Heist",
+    "Spy",
+    "Martial Arts",
+    "Historical",
+    "Political",
+    "Legal Drama",
+    "Sports",
+    "Teen",
+    "Road Trip",
+    "Alien",
+    "Zombie",
+    "Mythology",
+    "Experimental",
   ];
   const randomWord = words[Math.floor(Math.random() * words.length)];
-  // const page = Math.floor(Math.random() * 5) + 1;
+  const page = Math.floor(Math.random() * 5) + 1;
 
   const homeUrl = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577`;
-  // const searchUrl = `https://www.omdbapi.com/?s=${search}&page=${page}&apikey=900e3577`;
+  const searchUrl = `https://www.omdbapi.com/?s=${search}&page=${page}&apikey=900e3577`;
 
   useEffect(() => {
     const homePage = async () => {
@@ -39,6 +80,10 @@ const App = () => {
     };
     homePage();
   }, []);
+
+  let printHomeData = (
+    <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+  );
 
   useEffect(() => {
     const searchApi = async () => {
@@ -66,7 +111,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home movies={movies} />} />
       </Routes>
-      <Buttons />
     </div>
   );
 };

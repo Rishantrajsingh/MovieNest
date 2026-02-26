@@ -1,3 +1,4 @@
+import Buttons from "../components/Buttons";
 import MovieCard from "../components/MovieCard";
 
 const Home = (props) => {
@@ -14,6 +15,7 @@ const Home = (props) => {
           </div>
         );
       })}
+      <Buttons />
     </div>
   );
 };
