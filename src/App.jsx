@@ -8,7 +8,7 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const randomLetters = 0;
+
   const words = [
     "danger",
     "war",
@@ -21,9 +21,10 @@ const App = () => {
     "fire",
   ];
   const randomWord = words[Math.floor(Math.random() * words.length)];
+  // const page = Math.floor(Math.random() * 5) + 1;
 
   const homeUrl = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577`;
-  const searchUrl = `https://www.omdbapi.com/?s=${search}&apikey=900e3577`;
+  // const searchUrl = `https://www.omdbapi.com/?s=${search}&page=${page}&apikey=900e3577`;
 
   useEffect(() => {
     const homePage = async () => {
@@ -54,7 +55,7 @@ const App = () => {
   }, [search]);
 
   return (
-    <div className="min-h-screen p-5 bg-gray-900 flex flex-col gap-5">
+    <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
       <Header
         isSearching={isSearching}
         setIsSearching={setIsSearching}
