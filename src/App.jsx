@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Header from "./components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import SideBar from "./components/SideBar";
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -31,6 +32,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
+      <SideBar />
       <Header
         isSearching={isSearching}
         setIsSearching={setIsSearching}
