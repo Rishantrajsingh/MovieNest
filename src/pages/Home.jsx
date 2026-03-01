@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../components/Loader";
 
-const Home = (props) => {
+const Home = () => {
   const words = [
     "Action",
     "Adventure",

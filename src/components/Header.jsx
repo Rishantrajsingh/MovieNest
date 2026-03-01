@@ -20,7 +20,6 @@ const Header = (props) => {
           value={props.search}
           onChange={(e) => {
             props.setSearch(e.target.value);
-            props.setIsSearching(true);
           }}
           className="outline-none border-none px-3 w-full h-full text-xl rounded-full"
           type="text"

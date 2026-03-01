@@ -3,26 +3,23 @@ import Home from "./pages/Home";
 import Header from "./components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SideBar from "./components/SideBar";
+import { Loader } from "lucide-react";
+import MovieCard from "./components/MovieCard";
+import Buttons from "./components/Buttons";
 
 const App = () => {
-  const [movies, setMovies] = useState([]);
-
+  const [searchMovies, setSearchMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-
-  const page = Math.floor(Math.random() * 5) + 1;
-
+  const [loading, setLoading] = useState(false);
   const searchUrl = `https://www.omdbapi.com/?s=${search}&apikey=900e3577`;
 
   useEffect(() => {
     const searchApi = async () => {
       try {
-        if (isSearching && search !== "") {
-          const res = await axios.get(searchUrl);
-          setMovies(res.data.Search || []);
-          console.log(res.data.Search || []);
-        }
+        const res = await axios.get(searchUrl);
+        setSearchMovies(res.data.Search || []);
+        console.log(res.data.Search || []);
       } catch (error) {
         console.log(error);
       }
@@ -32,7 +29,6 @@ const App = () => {
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
-      <SideBar />
       <Header
         isSearching={isSearching}
         setIsSearching={setIsSearching}
