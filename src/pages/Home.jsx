@@ -63,6 +63,8 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const homeUrl = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577&page=${page}`;
 
+  const [movies, setMovies] = useState();
+
   useEffect(() => {
     setLoading(true);
     const homePage = async () => {
