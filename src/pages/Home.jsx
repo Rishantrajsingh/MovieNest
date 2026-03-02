@@ -3,67 +3,14 @@ import Buttons from "../components/Buttons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../components/Loader";
+import randomWord from "../constants/RandomWords";
 
 const Home = () => {
-  const words = [
-    "Action",
-    "Adventure",
-    "Drama",
-    "Comedy",
-    "Thriller",
-    "Horror",
-    "Romance",
-    "Sci-Fi",
-    "Fantasy",
-    "Mystery",
-    "Crime",
-    "Animation",
-    "Biography",
-    "Documentary",
-    "Family",
-    "Musical",
-    "War",
-    "Western",
-    "Superhero",
-    "Psychological",
-    "Suspense",
-    "Dark",
-    "Emotional",
-    "Inspirational",
-    "Blockbuster",
-    "Indie",
-    "Classic",
-    "Cult",
-    "Epic",
-    "Romantic Comedy",
-    "Survival",
-    "Time Travel",
-    "Dystopian",
-    "Post-Apocalyptic",
-    "Based on True Story",
-    "Coming of Age",
-    "Revenge",
-    "Heist",
-    "Spy",
-    "Martial Arts",
-    "Historical",
-    "Political",
-    "Legal Drama",
-    "Sports",
-    "Teen",
-    "Road Trip",
-    "Alien",
-    "Zombie",
-    "Mythology",
-    "Experimental",
-  ];
-  const randomWord = words[Math.floor(Math.random() * words.length)];
   const [page, setPage] = useState(1);
+  const [movies, setMovies] = useState([]);
   const [homeMovies, setHomeMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const homeUrl = `https://www.omdbapi.com/?s=${randomWord}&apikey=900e3577&page=${page}`;
-
-  const [movies, setMovies] = useState();
 
   useEffect(() => {
     setLoading(true);
