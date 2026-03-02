@@ -31,21 +31,24 @@ const Home = () => {
   const [randomWord] = useState(
     words[Math.floor(Math.random() * words.length)],
   );
+  const [movies, setMovies] = useState([]);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const homeUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(
-    randomWord,
-  )}&apikey=900e3577&page=${page}`;
+  const [isSearching, setIsSearching] = useState(false);
 
-  const [search, setSearch] = useState("");
-  const [movies, setMovies] = useState([]);
-  const searched = `https://www.omdbapi.com/?s=${encodeURIComponent(search)}&apikey=900e3577&page=${page}`;
+  const api =
+    search && isSearching
+      ? `https://www.omdbapi.com/?s=${encodeURIComponent(search)}&apikey=900e3577&page=${page}`
+      : `https://www.omdbapi.com/?s=${encodeURIComponent(
+          randomWord,
+        )}&apikey=900e3577&page=${page}`;
 
   useEffect(() => {
-    setLoading(true);
-    const homePage = async () => {
+    const fetchMovies = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get(homeUrl);
+        const res = await axios.get(api);
         setMovies(res.data.Search || []);
         console.log(res.data.Search || []);
       } catch (error) {
@@ -54,38 +57,28 @@ const Home = () => {
         setLoading(false);
       }
     };
-    homePage();
-  }, [page, randomWord]);
+    fetchMovies();
+  }, [api]);
 
-  useEffect(() => {
-    setLoading(true);
-    const resultPage = async () => {
-      try {
-        const res = await axios.get(searched);
-        setMovies(res.data.Search || []);
-        console.log(res.data.Search || []);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    resultPage();
-  }, [search]);
-
-  const nextPage = () => {
-    setPage((prev) => prev + 1);
+  const handleSearch = (query) => {
+    setSearch(query);
+    setIsSearching(true);
+    setPage(1);
   };
 
+  const nextPage = () => setPage((prev) => prev + 1);
+
   const prevPage = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-    }
+    if (page > 1) setPage((prev) => prev - 1);
   };
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
-      <Header search={search} setSearch={setSearch} />
+      <Header
+        search={search}
+        setSearch={setSearch}
+        handleSearch={handleSearch}
+      />
       {loading ? (
         <div className="flex justify-center items-center h-[60vh]">
           <Loader />

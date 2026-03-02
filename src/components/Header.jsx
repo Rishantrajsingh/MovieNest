@@ -19,7 +19,7 @@ const Header = (props) => {
         <input
           value={props.search}
           onChange={(e) => {
-            props.setSearch(e.target.value);
+            props.handleSearch(e.target.value);
           }}
           className="outline-none border-none px-3 w-full h-full text-xl rounded-full"
           type="text"
