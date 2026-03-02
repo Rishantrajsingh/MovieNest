@@ -31,16 +31,15 @@ const Home = () => {
   const [randomWord] = useState(
     words[Math.floor(Math.random() * words.length)],
   );
-
-  const [isSearching, setIsSearching] = useState(false);
   const [page, setPage] = useState(1);
-  const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
   const homeUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(
     randomWord,
   )}&apikey=900e3577&page=${page}`;
-  const searched = `https://www.omdbapi.com/?s=${search}&apikey=900e3577`;
+
+  const [search, setSearch] = useState("");
+  const [movies, setMovies] = useState([]);
+  const searched = `https://www.omdbapi.com/?s=${encodeURIComponent(search)}&apikey=900e3577&page=${page}`;
 
   useEffect(() => {
     setLoading(true);
@@ -86,14 +85,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
-      <Header
-        isSearching={isSearching}
-        setIsSearching={setIsSearching}
-        search={search}
-        setSearch={setSearch}
-        movies={movies}
-        setMovies={setMovies}
-      />
+      <Header search={search} setSearch={setSearch} />
       {loading ? (
         <div className="flex justify-center items-center h-[60vh]">
           <Loader />
