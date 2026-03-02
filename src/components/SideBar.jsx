@@ -4,7 +4,7 @@ const SideBar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="absolute top-4.5 left-2">
+    <div className="absolute top-4.4 left-2">
       {/* Hamburger Icon */}
       <button
         onClick={() => setOpen(true)}
