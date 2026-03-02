@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const SideBar = () => {
   const [open, setOpen] = useState(false);
@@ -38,17 +39,11 @@ const SideBar = () => {
         </button>
 
         {/* Nav Links */}
-        <nav className="mt-25 flex flex-col space-y-4 px-6">
-          <a href="#" className="text-white font-semibold text-xl">
-            Home
-          </a>
-          <a href="#" className="text-white font-semibold text-xl">
-            Top Rated Movies
-          </a>
-          <a href="#" className="text-white font-semibold text-xl">
-            Favourites
-          </a>
-        </nav>
+        <div className="mt-25 flex flex-col space-y-4 px-6 text-white font-semibold text-xl">
+          <Link to="/">Home</Link>
+          <Link to="/toprated">Top Rated Movies</Link>
+          <Link to="/fav">Favourites</Link>
+        </div>
       </div>
     </div>
   );
