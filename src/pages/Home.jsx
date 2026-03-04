@@ -66,12 +66,6 @@ const Home = () => {
     setPage(1);
   };
 
-  const nextPage = () => setPage((prev) => prev + 1);
-
-  const prevPage = () => {
-    if (page > 1) setPage((prev) => prev - 1);
-  };
-
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
       <Header
@@ -98,12 +92,7 @@ const Home = () => {
               );
             })}
           </div>
-          <Buttons
-            page={page}
-            setPage={setPage}
-            nextPage={nextPage}
-            prevPage={prevPage}
-          />
+          <Buttons page={page} setPage={setPage} />
         </div>
       )}
     </div>
