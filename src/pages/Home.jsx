@@ -50,9 +50,9 @@ const Home = () => {
       try {
         const res = await axios.get(api);
         setMovies(res.data.Search || []);
-        console.log(res.data.Search || []);
+        // console.log(res.data.Search || []);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }
