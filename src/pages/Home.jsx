@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
+import SearchBar from "../components/SearchBar";
 
 const Home = () => {
   const words = [
@@ -68,11 +69,15 @@ const Home = () => {
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
-      <Header
-        search={search}
-        setSearch={setSearch}
-        handleSearch={handleSearch}
-      />
+      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-gray-900 w-full py-5 px-4">
+        <Header />
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+          handleSearch={handleSearch}
+        />
+      </div>
+
       {loading ? (
         <div className="flex justify-center items-center h-[60vh]">
           <Loader />

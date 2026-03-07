@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 
-const SearchBar = () => {
+const SearchBar = (props) => {
   return (
     <div className="flex items-center w-full h-10 pl-3 rounded-full bg-white">
       <Search size={30} />
