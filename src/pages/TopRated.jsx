@@ -28,7 +28,7 @@ const TopRated = () => {
     <div className="min-h-screen w-full p-5 bg-gray-900 ">
       <Header />
       <div>
-        <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
+        <div className="grid grid-cols-2 gap-5 pt-7 pb-3 w-full">
           {topRatedMovies.map((elem, idx) => {
             return (
               <div key={idx}>
