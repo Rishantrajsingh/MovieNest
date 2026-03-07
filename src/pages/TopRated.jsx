@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Buttons from "../components/Buttons";
 import MovieCard from "../components/MovieCard";
+import Header from "../components/Header";
 
 const TopRated = () => {
   const api = "https://www.omdbapi.com/?s=starwars&apikey=900e3577";
@@ -25,6 +26,7 @@ const TopRated = () => {
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 ">
+      <Header />
       <div>
         <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
           {topRatedMovies.map((elem, idx) => {
@@ -33,7 +35,7 @@ const TopRated = () => {
                 <MovieCard
                   poster={elem.Poster}
                   title={elem.Title}
-                  id={elem.imdbID}
+                  imdbID={elem.imdbID}
                 />
               </div>
             );

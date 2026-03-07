@@ -13,7 +13,7 @@ const Header = (props) => {
           </h1>
         </Link>
       </div>
-
+      {/* 
       <div className="flex items-center w-full h-10 pl-3 rounded-full bg-white">
         <Search size={30} />
         <input
@@ -25,7 +25,7 @@ const Header = (props) => {
           type="text"
           placeholder="Search for movies ..."
         />
-      </div>
+      </div> */}
     </div>
   );
 };
