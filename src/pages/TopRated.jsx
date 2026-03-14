@@ -5,7 +5,7 @@ import MovieCard from "../components/MovieCard";
 import Header from "../components/Header";
 
 const TopRated = () => {
-  const topRatedMovies = [
+  const topRatedNames = [
     "The Shawshank Redemption",
     "The Godfather",
     "The Dark Knight",
@@ -58,7 +58,11 @@ const TopRated = () => {
     "Memento",
   ];
 
-  const api = "https://www.omdbapi.com/?t=star wars&apikey=900e3577";
+  let topNames = topRatedNames.map((e) => {
+    return console.log(e);
+  });
+
+  const api = "https://www.omdbapi.com/?t=topNames&apikey=900e3577";
 
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [topRatings, setTopRatings] = useState([]);
@@ -69,7 +73,7 @@ const TopRated = () => {
       try {
         const res = await axios.get(api);
         setTopRatedMovies(res.data.Search || []);
-        console.log(res.data || []);
+        // console.log(res.data || []);
       } catch (error) {
         console.log(error);
       }
