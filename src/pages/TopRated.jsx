@@ -5,7 +5,60 @@ import MovieCard from "../components/MovieCard";
 import Header from "../components/Header";
 
 const TopRated = () => {
-  const api = "https://www.omdbapi.com/?s=starwars&apikey=900e3577";
+  const topRatedMovies = [
+    "The Shawshank Redemption",
+    "The Godfather",
+    "The Dark Knight",
+    "The Godfather Part II",
+    "12 Angry Men",
+    "Schindler's List",
+    "The Lord of the Rings: The Return of the King",
+    "Pulp Fiction",
+    "The Good, the Bad and the Ugly",
+    "Fight Club",
+    "Forrest Gump",
+    "Inception",
+    "The Lord of the Rings: The Fellowship of the Ring",
+    "Star Wars: Episode V - The Empire Strikes Back",
+    "The Lord of the Rings: The Two Towers",
+    "The Matrix",
+    "Goodfellas",
+    "One Flew Over the Cuckoo's Nest",
+    "Seven Samurai",
+    "Se7en",
+    "City of God",
+    "The Silence of the Lambs",
+    "It's a Wonderful Life",
+    "Life Is Beautiful",
+    "Saving Private Ryan",
+    "Spirited Away",
+    "Interstellar",
+    "Parasite",
+    "The Green Mile",
+    "Léon: The Professional",
+    "The Usual Suspects",
+    "Harakiri",
+    "The Lion King",
+    "Back to the Future",
+    "Terminator 2: Judgment Day",
+    "American History X",
+    "Modern Times",
+    "Psycho",
+    "Gladiator",
+    "The Departed",
+    "Whiplash",
+    "The Prestige",
+    "Casablanca",
+    "Grave of the Fireflies",
+    "Once Upon a Time in the West",
+    "Rear Window",
+    "Cinema Paradiso",
+    "Apocalypse Now",
+    "Alien",
+    "Memento",
+  ];
+
+  const api = "https://www.omdbapi.com/?t=star wars&apikey=900e3577";
 
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [topRatings, setTopRatings] = useState([]);
@@ -15,8 +68,8 @@ const TopRated = () => {
     const getApi = async () => {
       try {
         const res = await axios.get(api);
-        console.log(res.data.Search || []);
         setTopRatedMovies(res.data.Search || []);
+        console.log(res.data || []);
       } catch (error) {
         console.log(error);
       }
