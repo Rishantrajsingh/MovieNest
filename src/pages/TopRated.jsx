@@ -6,65 +6,65 @@ import Header from "../components/Header";
 
 const TopRated = () => {
   const topRatedNames = [
-    "TheShawshankRedemption",
-    "TheGodfather",
-    "TheDarkKnight",
-    "TheGodfatherPartII",
-    "12AngryMen",
-    "Schindler'sList",
-    "TheLordoftheRings:TheReturnoftheKing",
-    "PulpFiction",
-    "TheGood,theBadandtheUgly",
-    "FightClub",
-    "ForrestGump",
+    "The Shawshank Redemption",
+    "The Godfather",
+    "The Dark Knight",
+    "The Godfather Part II",
+    "12 Angry Men",
+    "Schindler's List",
+    "The Lord of the Rings: The Return of the King",
+    "Pulp Fiction",
+    "The Good, the Bad and the Ugly",
+    "Fight Club",
+    "Forrest Gump",
     "Inception",
-    "TheLordoftheRings:TheFellowshipoftheRing",
-    "StarWars:EpisodeV-TheEmpireStrikesBack",
-    "TheLordoftheRings:TheTwoTowers",
-    "TheMatrix",
+    "The Lord of the Rings: The Fellowship of the Ring",
+    "Star Wars: Episode V - The Empire Strikes Back",
+    "The Lord of the Rings: The Two Towers",
+    "The Matrix",
     "Goodfellas",
-    "OneFlewOvertheCuckoo'sNest",
-    "SevenSamurai",
+    "One Flew Over the Cuckoo's Nest",
+    "Seven Samurai",
     "Se7en",
-    "CityofGod",
-    "TheSilenceoftheLambs",
-    "It'saWonderfulLife",
-    "LifeIsBeautiful",
-    "SavingPrivateRyan",
-    "SpiritedAway",
+    "City of God",
+    "The Silence of the Lambs",
+    "It's a Wonderful Life",
+    "Life Is Beautiful",
+    "Saving Private Ryan",
+    "Spirited Away",
     "Interstellar",
     "Parasite",
-    "TheGreenMile",
-    "Léon:TheProfessional",
-    "TheUsualSuspects",
+    "The Green Mile",
+    "Léon: The Professional",
+    "The Usual Suspects",
     "Harakiri",
-    "TheLionKing",
-    "BacktotheFuture",
-    "Terminator2:JudgmentDay",
-    "AmericanHistoryX",
-    "ModernTimes",
+    "The Lion King",
+    "Back to the Future",
+    "Terminator 2: Judgment Day",
+    "American History X",
+    "Modern Times",
     "Psycho",
     "Gladiator",
-    "TheDeparted",
+    "The Departed",
     "Whiplash",
-    "ThePrestige",
+    "The Prestige",
     "Casablanca",
-    "GraveoftheFireflies",
-    "OnceUponaTimeintheWest",
-    "RearWindow",
-    "CinemaParadiso",
-    "ApocalypseNow",
+    "Grave of the Fireflies",
+    "Once Upon a Time in the West",
+    "Rear Window",
+    "Cinema Paradiso",
+    "Apocalypse Now",
     "Alien",
     "Memento",
   ];
 
-  let topNames = topRatedNames.map((e) => {
-    for (let i = 0; i < e.length; i++) {
-      return `https://www.omdbapi.com/?s=${e}&apikey=900e3577`;
-    }
-  });
+  // const topNames = topRatedNames.map((e) => {
+  //   for (let i = 0; i < e.length; i++) {
+  //     return `https://www.omdbapi.com/?s=${e}&apikey=900e3577`;
+  //   }
+  // });
 
-  // const api = "https://www.omdbapi.com/?t=topNames&apikey=900e3577";
+  const topNames = "https://www.omdbapi.com/?t=avengers&apikey=900e3577";
 
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [page, setPage] = useState(1);
@@ -73,8 +73,8 @@ const TopRated = () => {
     const getApi = async () => {
       try {
         const res = await axios.get(topNames);
-        setTopRatedMovies(res.data.Search || []);
-        console.log(res.data.Search || []);
+        setTopRatedMovies(res.data || []);
+        console.log(res.data || []);
       } catch (error) {
         console.log(error);
       }
