@@ -99,7 +99,7 @@ const TopRated = () => {
             );
           })}
         </div>
-        <Buttons page={page} setPage={setPage} />
+        {/* <Buttons page={page} setPage={setPage} /> */}
       </div>
     </div>
   );
