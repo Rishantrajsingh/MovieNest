@@ -64,7 +64,7 @@ const TopRated = () => {
   //   }
   // });
 
-  const topNames = "https://www.omdbapi.com/?t=avengers&apikey=900e3577";
+  const topNames = "https://www.omdbapi.com/?s=avengers&apikey=900e3577";
 
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [page, setPage] = useState(1);
