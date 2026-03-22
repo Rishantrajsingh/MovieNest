@@ -58,13 +58,13 @@ const TopRated = () => {
     "Memento",
   ];
 
-  // const topNames = topRatedNames.map((e) => {
-  //   for (let i = 0; i < e.length; i++) {
-  //     return `https://www.omdbapi.com/?s=${e}&apikey=900e3577`;
-  //   }
-  // });
+  const topNames = topRatedNames.map((e) => {
+    for (let i = 0; i < e.length; i++) {
+      return `https://www.omdbapi.com/?s=${e}&apikey=900e3577`;
+    }
+  });
 
-  const topNames = "https://www.omdbapi.com/?s=avengers&apikey=900e3577";
+  // const topNames = "https://www.omdbapi.com/?s=avengers&apikey=900e3577";
 
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [page, setPage] = useState(1);
@@ -73,8 +73,8 @@ const TopRated = () => {
     const getApi = async () => {
       try {
         const res = await axios.get(topNames);
-        setTopRatedMovies(res.data || []);
-        console.log(res.data || []);
+        setTopRatedMovies(res.data.Search || []);
+        console.log(res.data.Search || []);
       } catch (error) {
         console.log(error);
       }

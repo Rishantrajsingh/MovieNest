@@ -5,7 +5,7 @@ const MovieCard = (props) => {
       <div className="h-60 w-fit">
         <img
           className="w-full h-60 rounded"
-          src={props.poster || noPoster}
+          src={props.poster}
           alt={props.title}
           onError={(e) => (e.target.src = noPoster)}
         />
