@@ -6,7 +6,6 @@ import Header from "../components/Header";
 
 const TopRated = () => {
   const topRatedNames = [
-    "The Shawshank Redemption",
     "The Godfather",
     "The Dark Knight",
     "The Godfather Part II",
@@ -58,36 +57,43 @@ const TopRated = () => {
     "Memento",
   ];
 
-  const topNames = topRatedNames.map((e) => {
-    for (let i = 0; i < e.length; i++) {
-      return `https://www.omdbapi.com/?s=${e}&apikey=900e3577`;
-    }
-  });
-
-  // const topNames = "https://www.omdbapi.com/?s=avengers&apikey=900e3577";
-
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    const getApi = async () => {
-      try {
-        const res = await axios.get(topNames);
-        setTopRatedMovies(res.data.Search || []);
-        console.log(res.data.Search || []);
-      } catch (error) {
-        console.log(error);
+  const getPoster = async () => {
+    try {
+      for (let i = 0; i < topRatedNames.length; i++) {
+        const movies = topRatedNames[i];
+        const res = await axios.get(
+          `https://www.omdbapi.com/?s=${encodeURIComponent(movies)}&apikey=900e3577`,
+        );
+        console.log(res.data.Search);
       }
-    };
-    getApi();
-  }, [topNames]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  getPoster();
+
+  const getTitle = async () => {
+    try {
+      for (let i = 0; i < topRatedNames.length; i++) {
+        const movies = topRatedNames[i];
+        const res = await axios.get(
+          `https://www.omdbapi.com/?t=${encodeURIComponent(movies)}&apikey=900e3577`,
+        );
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getTitle();
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 ">
       <Header />
-      <div>
+      {/* <div>
         <div className="grid grid-cols-2 gap-5 pt-7 pb-3 w-full">
-          {topRatedMovies.map((elem, idx) => {
+          {movies.map((elem, idx) => {
             return (
               <div key={idx}>
                 <MovieCard
@@ -99,8 +105,8 @@ const TopRated = () => {
             );
           })}
         </div>
-        {/* <Buttons page={page} setPage={setPage} /> */}
-      </div>
+        <Buttons page={page} setPage={setPage} />
+      </div> */}
     </div>
   );
 };
