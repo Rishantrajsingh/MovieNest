@@ -12,49 +12,6 @@ const TopRated = () => {
     "12 Angry Men",
     "Schindler's List",
     "The Lord of the Rings: The Return of the King",
-    "Pulp Fiction",
-    "The Good, the Bad and the Ugly",
-    "Fight Club",
-    "Forrest Gump",
-    "Inception",
-    "The Lord of the Rings: The Fellowship of the Ring",
-    "Star Wars: Episode V - The Empire Strikes Back",
-    "The Lord of the Rings: The Two Towers",
-    "The Matrix",
-    "Goodfellas",
-    "One Flew Over the Cuckoo's Nest",
-    "Seven Samurai",
-    "Se7en",
-    "City of God",
-    "The Silence of the Lambs",
-    "It's a Wonderful Life",
-    "Life Is Beautiful",
-    "Saving Private Ryan",
-    "Spirited Away",
-    "Interstellar",
-    "Parasite",
-    "The Green Mile",
-    "Léon: The Professional",
-    "The Usual Suspects",
-    "Harakiri",
-    "The Lion King",
-    "Back to the Future",
-    "Terminator 2: Judgment Day",
-    "American History X",
-    "Modern Times",
-    "Psycho",
-    "Gladiator",
-    "The Departed",
-    "Whiplash",
-    "The Prestige",
-    "Casablanca",
-    "Grave of the Fireflies",
-    "Once Upon a Time in the West",
-    "Rear Window",
-    "Cinema Paradiso",
-    "Apocalypse Now",
-    "Alien",
-    "Memento",
   ];
 
   const getPoster = async () => {
@@ -64,13 +21,12 @@ const TopRated = () => {
         const res = await axios.get(
           `https://www.omdbapi.com/?s=${encodeURIComponent(movies)}&apikey=900e3577`,
         );
-        console.log(res.data.Search);
+        console.log(res.data.Search[0].Poster);
       }
     } catch (error) {
       console.log(error);
     }
   };
-
   getPoster();
 
   const getTitle = async () => {
@@ -80,7 +36,7 @@ const TopRated = () => {
         const res = await axios.get(
           `https://www.omdbapi.com/?t=${encodeURIComponent(movies)}&apikey=900e3577`,
         );
-        console.log(res.data);
+        console.log(res.data.Title);
       }
     } catch (error) {
       console.log(error);
