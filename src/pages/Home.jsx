@@ -36,6 +36,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  // const [isFav, setIsFav] = useState(false);
 
   const api =
     search && isSearching
@@ -49,8 +50,14 @@ const Home = () => {
       setLoading(true);
       try {
         const res = await axios.get(api);
-        setMovies(res.data.Search || []);
-        console.log(res.data.Search || []);
+        const movies = res.data.Search || [];
+
+        const uniqueMovies = movies.filter(
+          (movie, index, self) =>
+            index === self.findIndex((m) => m.imdbID === movie.imdbID),
+        );
+        setMovies(uniqueMovies);
+        console.log(uniqueMovies);
       } catch (error) {
         console.log(error);
       } finally {
@@ -66,13 +73,35 @@ const Home = () => {
     setPage(1);
   };
 
+  const [favIds, setFavIds] = useState([]);
+
+  useEffect(() => {
+    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+    const ids = favMovies.map((m) => m.id);
+    setFavIds(ids);
+  }, []);
+
   const addToFav = (value) => {
-    let favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-    const movieObj = {
-      id: value,
-    };
-    favMovies.push(movieObj);
-    localStorage.setItem("favMovies", JSON.stringify(favMovies));
+    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+    const exists = favMovies.some((movie) => movie.id === value);
+    if (!exists) {
+      const updated = [...favMovies, { id: value }];
+      localStorage.setItem("favMovies", JSON.stringify(updated));
+
+      setFavIds([...favIds, value]);
+    }
+
+    // if (!exists) {
+    //   const movieObj = {
+    //     id: value,
+    //   };
+    //   favMovies.push(movieObj);
+    //   localStorage.setItem("favMovies", JSON.stringify(favMovies));
+    //   setIsFav(true);
+    // } else {
+    //   console.log("Already Added to Favorites");
+    //   setIsFav(false);
+    // }
   };
 
   const noPoster = "src/images/noPoster.jpeg";
@@ -99,22 +128,25 @@ const Home = () => {
               return (
                 <div
                   key={idx}
-                  className="flex flex-col text-center items-center gap-2 w-full border rounded bg-gray-800"
+                  className="flex flex-col text-center items-center gap-2 w-full py-2 px-2 border rounded bg-gray-800"
                 >
                   <div className="h-60 w-fit">
                     <img
                       className="w-full h-60 "
                       src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
+                      onError={(e) => (e.target.src = noPoster)}
                     />
                   </div>
                   <h1 className="text-white text-xl font-semibold">
                     {elem.Title}
                   </h1>
                   <button
-                    onClick={() => addToFav(elem.imdbID)}
+                    onClick={() => {
+                      addToFav(elem.imdbID);
+                    }}
                     className="text-white"
                   >
-                    add to fav
+                    {favIds.includes(elem.imdbID) ? "✅" : "❤️"}
                   </button>
                 </div>
               );
