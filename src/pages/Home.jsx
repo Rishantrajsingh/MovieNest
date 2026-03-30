@@ -37,6 +37,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   // const [isFav, setIsFav] = useState(false);
+  const [favIds, setFavIds] = useState([]);
 
   const api =
     search && isSearching
@@ -73,8 +74,6 @@ const Home = () => {
     setPage(1);
   };
 
-  const [favIds, setFavIds] = useState([]);
-
   useEffect(() => {
     const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
     const ids = favMovies.map((m) => m.id);
@@ -104,7 +103,8 @@ const Home = () => {
     // }
   };
 
-  const noPoster = "src/images/noPoster.jpeg";
+  const noPoster =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
@@ -137,17 +137,21 @@ const Home = () => {
                       onError={(e) => (e.target.src = noPoster)}
                     />
                   </div>
-                  <h1 className="text-white text-xl font-semibold">
-                    {elem.Title}
-                  </h1>
-                  <button
-                    onClick={() => {
-                      addToFav(elem.imdbID);
-                    }}
-                    className="text-white"
-                  >
-                    {favIds.includes(elem.imdbID) ? "✅" : "❤️"}
-                  </button>
+                  <div className="flex flex-col justify-between gap-5 h-full">
+                    <h1 className="text-white text-xl font-semibold">
+                      {elem.Title}
+                    </h1>
+                    <button
+                      onClick={() => {
+                        addToFav(elem.imdbID);
+                      }}
+                      className="text-white bg-gray-500 px-3 rounded py-1"
+                    >
+                      {favIds.includes(elem.imdbID)
+                        ? "✅Added to Fav"
+                        : "❤️Add to Fav"}
+                    </button>
+                  </div>
                 </div>
               );
             })}
