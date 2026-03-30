@@ -50,7 +50,7 @@ const Home = () => {
       try {
         const res = await axios.get(api);
         setMovies(res.data.Search || []);
-        // console.log(res.data.Search || []);
+        console.log(res.data.Search || []);
       } catch (error) {
         console.log(error);
       } finally {
@@ -75,6 +75,8 @@ const Home = () => {
     localStorage.setItem("favMovies", JSON.stringify(favMovies));
   };
 
+  const noPoster = "src/images/noPoster.jpeg";
+
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
       <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-gray-900 w-full py-5 px-4">
@@ -97,15 +99,21 @@ const Home = () => {
               return (
                 <div
                   key={idx}
-                  className="flex flex-col text-center items-center gap-2 w-full border border-amber-200 bg-gray-800"
+                  className="flex flex-col text-center items-center gap-2 w-full border rounded bg-gray-800"
                 >
                   <div className="h-60 w-fit">
-                    <img className="w-full h-60 rounded" src={elem.Poster} />
+                    <img
+                      className="w-full h-60 "
+                      src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
+                    />
                   </div>
                   <h1 className="text-white text-xl font-semibold">
                     {elem.Title}
                   </h1>
-                  <button onClick={() => addToFav(elem.imdbID)}>
+                  <button
+                    onClick={() => addToFav(elem.imdbID)}
+                    className="text-white"
+                  >
                     add to fav
                   </button>
                 </div>

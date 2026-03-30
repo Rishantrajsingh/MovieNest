@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import SearchBar from "../components/SearchBar";
-import MovieCard from "../components/MovieCard";
 import axios from "axios";
 
 const Favorites = () => {
   const [movies, setMovies] = useState([]);
 
-  const fetchMovies = async () => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-    const urls = favMovies.map((id) => {
-      return `https://www.omdbapi.com/?i=${id.id}&apikey=900e3577`;
-    });
-
-    const responses = await Promise.all(urls.map((url) => axios.get(url)));
-    const data = responses.map((res) => res.data);
-    setMovies(data);
-  };
-
   useEffect(() => {
+    const fetchMovies = async () => {
+      const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+      const urls = favMovies.map((id) => {
+        return `https://www.omdbapi.com/?i=${id.id}&apikey=900e3577`;
+      });
+      const responses = await Promise.all(urls.map((url) => axios.get(url)));
+      const data = responses.map((res) => res.data);
+      setMovies(data);
+    };
     fetchMovies();
   }, []);
 
