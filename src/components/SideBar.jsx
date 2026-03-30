@@ -41,7 +41,7 @@ const SideBar = () => {
         {/* Nav Links */}
         <div className="mt-25 flex flex-col space-y-4 px-6 text-white font-semibold text-xl">
           <Link to="/">Home</Link>
-          {/* <Link to="/toprated">Top Rated Movies</Link> */}
+          <Link to="/toprated">Top Rated Movies</Link>
           <Link to="/fav">Favourites</Link>
         </div>
       </div>

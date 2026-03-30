@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Buttons from "../components/Buttons";
-import MovieCard from "../components/MovieCard";
 import Header from "../components/Header";
 
 const TopRated = () => {
@@ -12,20 +11,6 @@ const TopRated = () => {
     "Schindler's List",
     "The Lord of the Rings: The Return of the King",
   ];
-
-  const [title, setTitle] = useState([]);
-  const [rating, setRating] = useState([]);
-  const [poster, setPoster] = useState([]);
-
-  const movies = title.map((t, index) => {
-    return {
-      title: t,
-      poster: poster[index],
-      rating: rating[index],
-    };
-  });
-
-  console.log(movies);
 
   // const api1 = `https://www.omdbapi.com/?s=avengers&apikey=900e3577`;
 
@@ -47,10 +32,7 @@ const TopRated = () => {
         const res = await axios.get(
           `https://www.omdbapi.com/?t=${encodeURIComponent(movieNames)}&apikey=900e3577`,
         );
-        const arr = Object.values(res.data);
-        setTitle(arr[0]);
-        setPoster(arr[13]);
-        setRating(arr[16]);
+        console.log(res);
       }
     } catch (error) {
       console.log(error);
@@ -102,22 +84,38 @@ const TopRated = () => {
   return (
     <div className="min-h-screen w-full p-5 bg-gray-900 ">
       <Header />
-      <div>
+      {/* <div>
         <div className="grid grid-cols-2 gap-5 pt-7 pb-3 w-full">
           {movies.map((elem, idx) => {
             return (
-              <div key={idx}>
-                <MovieCard
-                  poster={elem[13]}
-                  title={elem[0]}
-                  rating={elem[16]}
-                />
+              <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
+                {movies.map((elem, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="flex flex-col text-center items-center gap-2 w-full border border-amber-200 bg-gray-800"
+                    >
+                      <div className="h-60 w-fit">
+                        <img
+                          className="w-full h-60 rounded"
+                          src={elem.Poster}
+                        />
+                      </div>
+                      <h1 className="text-white text-xl font-semibold">
+                        {elem.Title}
+                      </h1>
+                      <button onClick={() => addToFav(elem.imdbID)}>
+                        add to fav
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
         </div>
-        {/* <Buttons page={page} setPage={setPage} /> */}
-      </div>
+        <Buttons page={page} setPage={setPage} />
+      </div> */}
     </div>
   );
 };

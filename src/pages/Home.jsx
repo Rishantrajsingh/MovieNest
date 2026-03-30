@@ -1,4 +1,3 @@
-import MovieCard from "../components/MovieCard";
 import Buttons from "../components/Buttons";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -40,7 +39,7 @@ const Home = () => {
 
   const api =
     search && isSearching
-      ? `https://www.omdbapi.com/?s=${encodeURIComponent(search)}&apikey=900e3577&page=${page}`
+      ? `https://www.omdbapi.com/?s=${encodeURIComponent(search.trim())}&apikey=900e3577&page=${page}`
       : `https://www.omdbapi.com/?s=${encodeURIComponent(
           randomWord,
         )}&apikey=900e3577&page=${page}`;
@@ -53,7 +52,7 @@ const Home = () => {
         setMovies(res.data.Search || []);
         // console.log(res.data.Search || []);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -65,6 +64,15 @@ const Home = () => {
     setSearch(query);
     setIsSearching(true);
     setPage(1);
+  };
+
+  const addToFav = (value) => {
+    let favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+    const movieObj = {
+      id: value,
+    };
+    favMovies.push(movieObj);
+    localStorage.setItem("favMovies", JSON.stringify(favMovies));
   };
 
   return (
@@ -87,12 +95,19 @@ const Home = () => {
           <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
             {movies.map((elem, idx) => {
               return (
-                <div key={idx}>
-                  <MovieCard
-                    poster={elem.Poster}
-                    title={elem.Title}
-                    id={elem.imdbID}
-                  />
+                <div
+                  key={idx}
+                  className="flex flex-col text-center items-center gap-2 w-full border border-amber-200 bg-gray-800"
+                >
+                  <div className="h-60 w-fit">
+                    <img className="w-full h-60 rounded" src={elem.Poster} />
+                  </div>
+                  <h1 className="text-white text-xl font-semibold">
+                    {elem.Title}
+                  </h1>
+                  <button onClick={() => addToFav(elem.imdbID)}>
+                    add to fav
+                  </button>
                 </div>
               );
             })}
