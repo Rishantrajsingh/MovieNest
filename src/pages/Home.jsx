@@ -36,7 +36,6 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  // const [isFav, setIsFav] = useState(false);
   const [favIds, setFavIds] = useState([]);
 
   const api =
