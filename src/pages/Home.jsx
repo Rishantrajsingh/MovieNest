@@ -37,6 +37,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [favIds, setFavIds] = useState([]);
+  const [message, setMessage] = useState("");
 
   const api =
     search && isSearching
@@ -56,8 +57,20 @@ const Home = () => {
           (movie, index, self) =>
             index === self.findIndex((m) => m.imdbID === movie.imdbID),
         );
-        setMovies(uniqueMovies);
-        console.log(uniqueMovies);
+
+        const bannedWords = ["adult", "erotic", "sex", "porn"];
+
+        const filteredMovies = uniqueMovies.filter((movie) => {
+          if (!movie.Title) return false;
+
+          return !bannedWords.some((word) =>
+            movie.Title.toLowerCase().includes(word),
+          );
+        });
+
+        setMovies(filteredMovies);
+
+        console.log(filteredMovies);
       } catch (error) {
         console.log(error);
       } finally {
@@ -87,19 +100,13 @@ const Home = () => {
       localStorage.setItem("favMovies", JSON.stringify(updated));
 
       setFavIds([...favIds, value]);
+      setMessage("Movie added to favorites");
+    } else {
+      setMessage("Already added to favorites");
     }
-
-    // if (!exists) {
-    //   const movieObj = {
-    //     id: value,
-    //   };
-    //   favMovies.push(movieObj);
-    //   localStorage.setItem("favMovies", JSON.stringify(favMovies));
-    //   setIsFav(true);
-    // } else {
-    //   console.log("Already Added to Favorites");
-    //   setIsFav(false);
-    // }
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
   };
 
   const noPoster =
@@ -156,6 +163,11 @@ const Home = () => {
             })}
           </div>
           <Buttons page={page} setPage={setPage} />
+          {message && (
+            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white text-black rounded">
+              {message}
+            </div>
+          )}
         </div>
       )}
     </div>
