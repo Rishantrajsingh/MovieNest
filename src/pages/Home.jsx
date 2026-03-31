@@ -4,6 +4,7 @@ import axios from "axios";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const words = [
@@ -38,6 +39,7 @@ const Home = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [favIds, setFavIds] = useState([]);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const api =
     search && isSearching
@@ -58,7 +60,7 @@ const Home = () => {
             index === self.findIndex((m) => m.imdbID === movie.imdbID),
         );
 
-        const bannedWords = ["adult", "erotic", "sex", "porn"];
+        const bannedWords = ["adult", "erotic", "sex", "porn", "romance"];
 
         const filteredMovies = uniqueMovies.filter((movie) => {
           if (!movie.Title) return false;
@@ -134,6 +136,7 @@ const Home = () => {
               return (
                 <div
                   key={idx}
+                  onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="flex flex-col text-center items-center gap-2 w-full py-2 px-2 border rounded bg-gray-800"
                 >
                   <div className="h-60 w-fit">
