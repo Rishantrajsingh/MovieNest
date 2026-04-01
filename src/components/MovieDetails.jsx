@@ -27,24 +27,43 @@ const MovieDetails = () => {
         <Header />
       </div>
       <div className="mt-20 flex flex-col items-center">
-        <img
-          className="w-60 h-100"
-          src={movie.Poster !== "N/A" ? movie.Poster : noPoster}
-          onError={(e) => (e.target.src = noPoster)}
-        />
-        <div className="text-white">
-          <h1 className="text-lg">{movie.Title}</h1>
+        <div className="text-white flex flex-col items-start">
+          <img
+            src={movie.Poster !== "N/A" ? movie.Poster : noPoster}
+            onError={(e) => (e.target.src = noPoster)}
+            className="w-full h-auto rounded-lg mb-4"
+          />
 
-          <p>Year: {movie.Year}</p>
-          <p>Rating: {movie.imdbRating}</p>
-          <p>Genre: {movie.Genre}</p>
-          <p>Runtime: {movie.Runtime}</p>
+          <h1 className="text-2xl font-bold mb-2">{movie.Title}</h1>
 
-          <h2>Plot</h2>
-          <p>{movie.Plot}</p>
+          <div className="text-sm text-gray-400 mb-3">
+            <p>Year: {movie.Year}</p>
+            <p>Genre: {movie.Genre}</p>
+            <p>Runtime: {movie.Runtime}</p>
+          </div>
 
-          <p>Director: {movie.Director}</p>
-          <p>Actors: {movie.Actors}</p>
+          <p className="text-yellow-400 font-semibold mb-4">
+            ⭐ {movie.imdbRating} / 10
+          </p>
+
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold mb-1">Plot</h2>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              {movie.Plot}
+            </p>
+          </div>
+
+          <p className="text-sm mb-1">
+            <span className="font-semibold">Director:</span> {movie.Director}
+          </p>
+
+          <p className="text-sm mb-4">
+            <span className="font-semibold">Actors:</span> {movie.Actors}
+          </p>
+
+          <button className="w-full bg-gray-300 hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black">
+            ❤️ Add to Favorites
+          </button>
         </div>
       </div>
     </div>
