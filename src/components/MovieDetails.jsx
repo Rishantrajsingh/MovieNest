@@ -6,6 +6,7 @@ import Header from "./Header";
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState([]);
+  const [favIds, setFavIds] = useState([]);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -17,6 +18,23 @@ const MovieDetails = () => {
     };
     fetchMovie();
   }, []);
+
+  useEffect(() => {
+    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+    const ids = favMovies.map((m) => m.id);
+    setFavIds(ids);
+  }, []);
+
+  const addToFav = (value) => {
+    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+    const exists = favMovies.some((movie) => movie.id === value);
+    if (!exists) {
+      const updated = [...favMovies, { id: value }];
+      localStorage.setItem("favMovies", JSON.stringify(updated));
+
+      setFavIds([...favIds, value]);
+    }
+  };
 
   const noPoster =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
@@ -61,8 +79,15 @@ const MovieDetails = () => {
             <span className="font-semibold">Actors:</span> {movie.Actors}
           </p>
 
-          <button className="w-full bg-gray-300 hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black">
-            ❤️ Add to Favorites
+          <button
+            onClick={() => {
+              addToFav(movie.imdbID);
+            }}
+            className="w-full bg-gray-300 hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
+          >
+            {favIds.includes(movie.imdbID)
+              ? "✅Added to Favorites"
+              : "❤️Add to Favorites"}
           </button>
         </div>
       </div>
