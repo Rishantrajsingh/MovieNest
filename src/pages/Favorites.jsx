@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
 import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 const Favorites = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -69,21 +71,24 @@ const Favorites = () => {
               key={idx}
               className="flex flex-col text-center items-center gap-2 w-full pb-3 border border-slate-700 rounded bg-slate-900"
             >
-              <div className="h-60 w-fit">
+              <div
+                onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                className="h-60 w-full"
+              >
                 <img
                   className="w-full h-60 rounded object-cover"
                   src={elem.Poster}
                 />
               </div>
               <div className="flex flex-col justify-between items-center gap-5 h-full px-2">
-                <h1 className="text-white text-xl font-semibold">
+                <h1 className="text-white text-lg font-semibold">
                   {elem.Title}
                 </h1>
                 <button
                   onClick={() => removeFromFav(elem.imdbID)}
                   className="text-black bg-white px-3 rounded py-1 font-semibold w-fit"
                 >
-                  ❌ Remove
+                  💔 Remove
                 </button>
               </div>
             </div>

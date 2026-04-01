@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState([]);
   const [favIds, setFavIds] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -34,6 +35,16 @@ const MovieDetails = () => {
 
       setFavIds([...favIds, value]);
     }
+  };
+
+  const removeFromFav = (id) => {
+    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+
+    const updated = favMovies.filter((movie) => movie.imdbID !== id);
+
+    localStorage.setItem("favMovies", JSON.stringify(updated));
+
+    navigate(-1);
   };
 
   const noPoster =
@@ -81,12 +92,14 @@ const MovieDetails = () => {
 
           <button
             onClick={() => {
-              addToFav(movie.imdbID);
+              favIds.includes(movie.imdbID)
+                ? removeFromFav(movie.imdbID)
+                : addToFav(movie.imdbID);
             }}
             className="w-full bg-white hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
           >
             {favIds.includes(movie.imdbID)
-              ? "✅Added to Favorites"
+              ? "💔 Remove from Fav"
               : "❤️Add to Favorites"}
           </button>
         </div>
