@@ -139,7 +139,7 @@ const Home = () => {
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="flex flex-col text-center items-center gap-2 w-full pb-3 border border-slate-700 rounded bg-slate-900"
                 >
-                  <div className="h-60 w-fit">
+                  <div className="h-60 w-full">
                     <img
                       className="w-full h-60 rounded object-cover"
                       src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
