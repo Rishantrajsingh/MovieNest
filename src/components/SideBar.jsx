@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const SideBar = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="absolute top-4.4 left-2">
-      {/* Hamburger Icon */}
       <button
         onClick={() => setOpen(true)}
         className="m-4 flex flex-col gap-1 md:hidden"
@@ -16,7 +15,6 @@ const SideBar = () => {
         <span className="h-1 w-7 bg-white"></span>
       </button>
 
-      {/* Overlay */}
       {open && (
         <div
           onClick={() => setOpen(false)}
@@ -24,13 +22,11 @@ const SideBar = () => {
         ></div>
       )}
 
-      {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white z-50
+        className={`fixed top-0 left-0 h-full w-64 bg-slate-950 text-white z-50
         transform transition-transform duration-300
         ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
-        {/* Close button */}
         <button
           onClick={() => setOpen(false)}
           className="absolute top-4 right-4 text-4xl"
@@ -38,11 +34,28 @@ const SideBar = () => {
           ×
         </button>
 
-        {/* Nav Links */}
         <div className="mt-25 flex flex-col space-y-4 px-6 text-white font-semibold text-xl">
-          <Link to="/">Home</Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 underline border-yellow-400"
+                : "text-white"
+            }
+          >
+            Home
+          </NavLink>
           {/* <Link to="/toprated">Top Rated Movies</Link> */}
-          <Link to="/fav">Favourites</Link>
+          <NavLink
+            to="/favorites"
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 underline border-yellow-400"
+                : "text-white"
+            }
+          >
+            Favourites
+          </NavLink>
         </div>
       </div>
     </div>

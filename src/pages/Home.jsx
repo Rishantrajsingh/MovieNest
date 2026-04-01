@@ -115,8 +115,8 @@ const Home = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col gap-5">
-      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-gray-900 w-full py-5 px-4">
+    <div className="min-h-screen w-full p-5 bg-slate-950 flex flex-col gap-5">
+      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
         <Header />
         <SearchBar
           search={search}
@@ -137,28 +137,28 @@ const Home = () => {
                 <div
                   key={idx}
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                  className="flex flex-col text-center items-center gap-2 w-full py-2 px-2 border rounded bg-gray-800"
+                  className="flex flex-col text-center items-center gap-2 w-full pb-3 border border-slate-700 rounded bg-slate-900"
                 >
                   <div className="h-60 w-fit">
                     <img
-                      className="w-full h-60 "
+                      className="w-full h-60 rounded object-cover"
                       src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
                       onError={(e) => (e.target.src = noPoster)}
                     />
                   </div>
-                  <div className="flex flex-col justify-between gap-5 h-full">
-                    <h1 className="text-white text-xl font-semibold">
+                  <div className="flex flex-col justify-between items-center gap-5 h-full px-2">
+                    <h1 className="text-white text-lg font-semibold">
                       {elem.Title}
                     </h1>
                     <button
                       onClick={() => {
                         addToFav(elem.imdbID);
                       }}
-                      className="text-white bg-gray-500 px-3 rounded py-1"
+                      className="text-black bg-white px-3 rounded py-1 font-semibold w-fit"
                     >
                       {favIds.includes(elem.imdbID)
-                        ? "✅Added to Fav"
-                        : "❤️Add to Fav"}
+                        ? "✅ Added to Fav"
+                        : "❤️ Add to Fav"}
                     </button>
                   </div>
                 </div>
