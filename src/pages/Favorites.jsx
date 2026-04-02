@@ -47,8 +47,8 @@ const Favorites = () => {
     );
   } else if (movies.length === 0) {
     return (
-      <div className="min-h-screen w-full p-5 bg-gray-900 flex flex-col justify-center">
-        <div className="fixed top-0 left-0 bg-gray-900 w-full py-5 px-4">
+      <div className="min-h-screen w-full p-5 bg-slate-950 flex flex-col justify-center">
+        <div className="fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
           <Header />
         </div>
         <h2 className="text-center text-white text-xl">
