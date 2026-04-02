@@ -39,9 +39,11 @@ const MovieDetails = () => {
   const removeFromFav = (id) => {
     const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
 
-    const updated = favMovies.filter((movie) => movie.imdbID !== id);
+    const updated = favMovies.filter((movie) => movie.id !== id);
 
     localStorage.setItem("favMovies", JSON.stringify(updated));
+
+    setFavIds(updated.map((m) => m.id));
 
     navigate(-1);
   };
