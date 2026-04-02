@@ -61,18 +61,14 @@ const Home = () => {
         );
 
         const bannedWords = ["adult", "erotic", "sex", "porn", "romance"];
-
         const filteredMovies = uniqueMovies.filter((movie) => {
           if (!movie.Title) return false;
-
           return !bannedWords.some((word) =>
             movie.Title.toLowerCase().includes(word),
           );
         });
 
         setMovies(filteredMovies);
-
-        console.log(filteredMovies);
       } catch (error) {
         console.log(error);
       } finally {
@@ -81,12 +77,6 @@ const Home = () => {
     };
     fetchMovies();
   }, [api]);
-
-  const handleSearch = (query) => {
-    setSearch(query);
-    setIsSearching(true);
-    setPage(1);
-  };
 
   useEffect(() => {
     const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
@@ -121,7 +111,8 @@ const Home = () => {
         <SearchBar
           search={search}
           setSearch={setSearch}
-          handleSearch={handleSearch}
+          setIsSearching={setIsSearching}
+          // handleSearch={handleSearch}
         />
       </div>
 

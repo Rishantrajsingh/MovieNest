@@ -15,7 +15,6 @@ const MovieDetails = () => {
         `https://www.omdbapi.com/?i=${id}&apikey=900e3577`,
       );
       setMovie(res.data);
-      console.log(res.data);
     };
     fetchMovie();
   }, []);
@@ -92,9 +91,11 @@ const MovieDetails = () => {
 
           <button
             onClick={() => {
-              favIds.includes(movie.imdbID)
-                ? removeFromFav(movie.imdbID)
-                : addToFav(movie.imdbID);
+              if (favIds.includes(movie.imdbID)) {
+                removeFromFav(movie.imdbID);
+              } else {
+                addToFav(movie.imdbID);
+              }
             }}
             className="w-full bg-white hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
           >
