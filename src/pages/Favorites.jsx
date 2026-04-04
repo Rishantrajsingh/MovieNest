@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
-import Loader from "../components/Loader";
+import HomeLoader from "../components/HomeLoader";
 import { useNavigate } from "react-router-dom";
 
 const Favorites = () => {
@@ -42,7 +42,7 @@ const Favorites = () => {
         <div className="fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
           <Header />
         </div>
-        <Loader />
+        <HomeLoader />
       </div>
     );
   } else if (movies.length === 0) {

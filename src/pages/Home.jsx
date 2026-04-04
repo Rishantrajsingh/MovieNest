@@ -1,7 +1,7 @@
 import Buttons from "../components/Buttons";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "../components/Loader";
+import HomeLoader from "../components/HomeLoader";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
@@ -117,8 +117,8 @@ const Home = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center h-[60vh]">
-          <Loader />
+        <div className="flex justify-center items-center">
+          <HomeLoader />
         </div>
       ) : (
         <div>
