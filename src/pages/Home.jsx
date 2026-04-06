@@ -117,7 +117,7 @@ const Home = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center pt-32">
           <HomeLoader />
         </div>
       ) : (

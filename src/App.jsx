@@ -3,15 +3,8 @@ import Home from "./pages/Home";
 import TopRated from "./pages/TopRated";
 import Favorites from "./pages/Favorites";
 import MovieDetails from "./components/MovieDetails";
-import { useState } from "react";
-import Splash from "./components/Splash";
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
-
-  if (loading) {
-    return <Splash onFinish={() => setLoading(false)} />;
-  }
   return (
     <Routes>
       <Route path="/" element={<Home />} />

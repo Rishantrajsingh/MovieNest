@@ -1,7 +1,7 @@
 const HomeLoader = () => {
   return (
-    <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full animate-pulse">
-      {Array.from({ length: 8 }).map((_, idx) => (
+    <div className="grid grid-cols-2 gap-5 pb-3 w-full animate-pulse">
+      {Array.from({ length: 4 }).map((_, idx) => (
         <div
           key={idx}
           className="flex flex-col items-center gap-3 w-full pb-3 border border-slate-700 rounded bg-slate-900"
