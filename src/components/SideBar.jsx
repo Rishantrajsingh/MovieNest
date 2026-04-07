@@ -45,7 +45,16 @@ const SideBar = () => {
           >
             Home
           </NavLink>
-          {/* <Link to="/toprated">Top Rated Movies</Link> */}
+          <NavLink
+            to="/toprated"
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 underline border-yellow-400"
+                : "text-white"
+            }
+          >
+            Top Rated Movies
+          </NavLink>
           <NavLink
             to="/favorites"
             className={({ isActive }) =>

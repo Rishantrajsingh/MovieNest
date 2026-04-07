@@ -111,7 +111,7 @@ const MovieDetails = () => {
             >
               {favIds.includes(movie.imdbID)
                 ? "💔 Remove from Fav"
-                : "❤️Add to Favorites"}
+                : "❤️ Add to Favorites"}
             </button>
           </div>
         </div>
