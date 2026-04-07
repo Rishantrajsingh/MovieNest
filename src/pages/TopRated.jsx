@@ -104,7 +104,7 @@ const TopRated = () => {
 
         setMovies(movies);
         setLoading(false);
-        console.log(movies);
+        // console.log(movies);
       } catch (error) {
         console.log(error);
       }
