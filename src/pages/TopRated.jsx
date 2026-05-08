@@ -135,6 +135,9 @@ const TopRated = () => {
     }, 2000);
   };
 
+  const noPoster =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
+
   return (
     <div className="min-h-screen w-full p-5 bg-slate-950 flex flex-col gap-5">
       <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
@@ -142,7 +145,7 @@ const TopRated = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center pt-32">
+        <div className="flex justify-center items-center pt-20">
           <HomeLoader />
         </div>
       ) : (

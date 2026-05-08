@@ -112,7 +112,6 @@ const Home = () => {
           search={search}
           setSearch={setSearch}
           setIsSearching={setIsSearching}
-          // handleSearch={handleSearch}
         />
       </div>
 
