@@ -1,10 +1,13 @@
 import Buttons from "../components/Buttons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HomeLoader from "../components/HomeLoader";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
+import Action from "../components/Action";
+import Cartoons from "../components/Cartoons";
+import Comedy from "../components/Comedy";
 
 const Home = () => {
   const words = [
@@ -90,7 +93,6 @@ const Home = () => {
     if (!exists) {
       const updated = [...favMovies, { id: value }];
       localStorage.setItem("favMovies", JSON.stringify(updated));
-
       setFavIds([...favIds, value]);
       setMessage("Movie added to favorites");
     } else {
@@ -104,9 +106,70 @@ const Home = () => {
   const noPoster =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
+  const moviePosters = [
+    "https://image.tmdb.org/t/p/original/9BBTo63ANSmhC4e6r62OJFuK2GL.jpg",
+    "https://image.tmdb.org/t/p/original/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg",
+    "https://image.tmdb.org/t/p/original/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg",
+    "https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+    "https://image.tmdb.org/t/p/original/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg",
+    "https://image.tmdb.org/t/p/original/wcKFYIiVDvRURrzglV9kGu7fpfY.jpg",
+    "https://image.tmdb.org/t/p/original/AaV1YIdWKnjAIAOe8UUKBFm327v.jpg",
+    "https://image.tmdb.org/t/p/original/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
+    "https://image.tmdb.org/t/p/original/xDMIl84Qo5Tsu62c9DGWhmPI67A.jpg",
+    "https://image.tmdb.org/t/p/original/hZkgoQYus5vegHoetLkCJzb17zJ.jpg",
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  // Auto Slide
+  useEffect(() => {
+    if (!moviePosters?.length) return;
+
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev === moviePosters.length - 1 ? 0 : prev + 1));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [moviePosters]);
+
+  // Next Slide
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === moviePosters.length - 1 ? 0 : prev + 1));
+  };
+
+  // Prev Slide
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? moviePosters.length - 1 : prev - 1));
+  };
+
+  // Touch Start
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  // Touch End
+  const handleTouchEnd = (e) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+
+    const distance = touchStartX.current - touchEndX.current;
+
+    // Swipe Left
+    if (distance > 50) {
+      nextSlide();
+    }
+
+    // Swipe Right
+    if (distance < -50) {
+      prevSlide();
+    }
+  };
+
   return (
-    <div className="min-h-screen w-full p-5 bg-slate-950 flex flex-col gap-5">
-      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
+    <div className="min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
+      <div className="fixed z-10 flex flex-col items-center gap-5 top-0 left-0 bg-slate-950 w-full py-5 px-4">
         <Header />
         <SearchBar
           search={search}
@@ -120,44 +183,36 @@ const Home = () => {
           <HomeLoader />
         </div>
       ) : (
-        <div>
-          <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
-            {movies.map((elem, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className="flex flex-col text-center items-center gap-2 w-full pb-3 border border-slate-700 rounded bg-slate-900"
-                >
-                  <div
-                    onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                    className="h-60 w-full"
-                  >
-                    <img
-                      className="w-full h-60 rounded object-cover"
-                      src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
-                      onError={(e) => (e.target.src = noPoster)}
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between items-center gap-5 h-full px-2">
-                    <h1 className="text-white text-lg font-semibold">
-                      {elem.Title}
-                    </h1>
-                    <button
-                      onClick={() => {
-                        addToFav(elem.imdbID);
-                      }}
-                      className="text-black bg-white px-3 rounded py-1 font-semibold w-fit"
-                    >
-                      {favIds.includes(elem.imdbID)
-                        ? "✅ Added to Fav"
-                        : "❤️ Add to Fav"}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+        <div className="z-0 pt-32">
+          <div
+            className="w-full h-fit overflow-hidden bg-white"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Slides */}
+            <div
+              className="flex h-fit transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${current * 100}%)`,
+              }}
+            >
+              {moviePosters.map((movie, index) => (
+                <img
+                  key={index}
+                  src={movie}
+                  alt={movie}
+                  className="w-full h-fit object-cover shrink-0"
+                />
+              ))}
+            </div>
           </div>
-          <Buttons page={page} setPage={setPage} />
+
+          {/* action movies section  */}
+          <Action />
+          <Cartoons />
+          {/* <Comedy /> */}
+
+          {/* <Buttons page={page} setPage={setPage} /> */}
           {message && (
             <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white text-black rounded">
               {message}
@@ -168,5 +223,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;

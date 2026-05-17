@@ -64,31 +64,6 @@ const TopRated = () => {
   const [favIds, setFavIds] = useState([]);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       let movieArray = [];
-
-  //       for (let i = 0; i < topRatedNames.length; i++) {
-  //         const movieName = topRatedNames[i];
-
-  //         const res = await axios.get(
-  //           `https://www.omdbapi.com/?t=${encodeURIComponent(movieName)}&apikey=900e3577&page=${page}`,
-  //         );
-
-  //         movieArray.push(res.data);
-  //       }
-
-  //       setMovies(movieArray);
-  //       console.log(movieArray);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   getData();
-  // }, []);
-
   useEffect(() => {
     const getData = async () => {
       try {
