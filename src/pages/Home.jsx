@@ -14,9 +14,9 @@ const Home = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
   const moviePosters = [
-    "src/images/banner3.png",
-    "src/images/banner2.png",
-    "src/images/banner1.png",
+    "public/banner3.png",
+    "public/banner2.png",
+    "public/banner1.png",
   ];
 
   const [current, setCurrent] = useState(0);
