@@ -5,6 +5,8 @@ import Header from "./Header";
 import DetailsLoader from "./DetailsLoader";
 
 const MovieDetails = () => {
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
   const { id } = useParams();
   const [movie, setMovie] = useState([]);
   const [favIds, setFavIds] = useState([]);
@@ -14,7 +16,7 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       const res = await axios.get(
-        `https://www.omdbapi.com/?i=${id}&apikey=900e3577`,
+        `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`,
       );
       setMovie(res.data);
       setLoading(false);
@@ -47,8 +49,6 @@ const MovieDetails = () => {
     localStorage.setItem("favMovies", JSON.stringify(updated));
 
     setFavIds(updated.map((m) => m.id));
-
-    navigate(-1);
   };
 
   const noPoster =
@@ -56,7 +56,7 @@ const MovieDetails = () => {
 
   return (
     <div className="min-h-screen w-full p-5 bg-slate-950 flex flex-col gap-5">
-      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
+      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
         <Header />
       </div>
       {loading ? (
@@ -69,7 +69,7 @@ const MovieDetails = () => {
             <img
               src={movie.Poster !== "N/A" ? movie.Poster : noPoster}
               onError={(e) => (e.target.src = noPoster)}
-              className="w-full h-auto rounded-lg mb-4 border border-slate-700"
+              className="w-full h-auto rounded-lg mb-4"
             />
 
             <h1 className="text-2xl font-bold mb-2">{movie.Title}</h1>

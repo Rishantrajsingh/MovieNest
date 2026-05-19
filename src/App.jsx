@@ -1,18 +1,26 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import TopRated from "./pages/TopRated";
 import Favorites from "./pages/Favorites";
 import MovieDetails from "./components/MovieDetails";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import ActionReloaded from "./pages/ActionReloaded";
+import KidsCorner from "./pages/KidsCorner";
+import ComedyFullyLoaded from "./pages/ComedyFullyLoaded";
+import TopRatedMovies from "./pages/TopRatedMovies";
+import SearchMovies from "./pages/SearchMovies";
+import LandingPage from "./pages/LandingPage";
+import TvShowsPage from "./pages/TvShowsPage";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/landing" element={<LandingPage />} />
       <Route path="/" element={<Home />} />
-      <Route path="/toprated" element={<TopRated />} />
+      <Route path="/action" element={<ActionReloaded />} />
+      <Route path="/kidscorner" element={<KidsCorner />} />
+      <Route path="/tvshows" element={<TvShowsPage />} />
+      <Route path="/comedy" element={<ComedyFullyLoaded />} />
+      <Route path="/toprated" element={<TopRatedMovies />} />
+      <Route path="/search" element={<SearchMovies />} />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/movie/:id" element={<MovieDetails />} />
     </Routes>

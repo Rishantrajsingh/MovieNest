@@ -3,7 +3,7 @@ const DetailsLoader = () => {
     <div className="mt-20 flex flex-col items-center animate-pulse w-full">
       <div className="flex flex-col items-start w-full">
         {/* Poster */}
-        <div className="w-full h-[420px] bg-slate-700 rounded-lg mb-4 border border-slate-700"></div>
+        <div className="w-105 bg-slate-700 rounded-lg mb-4 border border-slate-700"></div>
 
         {/* Title */}
         <div className="h-7 w-3/4 bg-slate-700 rounded mb-3"></div>

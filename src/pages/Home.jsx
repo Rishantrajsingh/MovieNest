@@ -1,172 +1,126 @@
-import Buttons from "../components/Buttons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HomeLoader from "../components/HomeLoader";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
+import Action from "../components/Action";
+import Cartoons from "../components/Cartoons";
+import TvShows from "../components/TvShows";
+import Comedy from "../components/Comedy";
+import TopRated from "../components/TopRated";
 
 const Home = () => {
-  const words = [
-    "Action",
-    "Adventure",
-    "Drama",
-    "Comedy",
-    "Thriller",
-    "Horror",
-    "Romance",
-    "Sci-Fi",
-    "Fantasy",
-    "Mystery",
-    "Crime",
-    "Animation",
-    "Biography",
-    "Documentary",
-    "Family",
-    "Musical",
-    "War",
-    "Western",
-    "Superhero",
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
+  const moviePosters = [
+    "src/images/banner3.png",
+    "src/images/banner2.png",
+    "src/images/banner1.png",
   ];
 
-  const [randomWord] = useState(
-    words[Math.floor(Math.random() * words.length)],
-  );
-  const [movies, setMovies] = useState([]);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-  const [favIds, setFavIds] = useState([]);
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const [loading, setLoading] = useState(true);
 
-  const api =
-    search && isSearching
-      ? `https://www.omdbapi.com/?s=${encodeURIComponent(search.trim())}&apikey=900e3577&page=${page}`
-      : `https://www.omdbapi.com/?s=${encodeURIComponent(
-          randomWord,
-        )}&apikey=900e3577&page=${page}`;
-
+  // Auto Slide
   useEffect(() => {
-    const fetchMovies = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(api);
-        const movies = res.data.Search || [];
+    if (!moviePosters?.length) return;
 
-        const uniqueMovies = movies.filter(
-          (movie, index, self) =>
-            index === self.findIndex((m) => m.imdbID === movie.imdbID),
-        );
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev === moviePosters.length - 1 ? 0 : prev + 1));
+    }, 3000);
 
-        const bannedWords = ["adult", "erotic", "sex", "porn", "romance"];
-        const filteredMovies = uniqueMovies.filter((movie) => {
-          if (!movie.Title) return false;
-          return !bannedWords.some((word) =>
-            movie.Title.toLowerCase().includes(word),
-          );
-        });
+    return () => clearInterval(interval);
+  }, [moviePosters]);
 
-        setMovies(filteredMovies);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovies();
-  }, [api]);
-
-  useEffect(() => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-    const ids = favMovies.map((m) => m.id);
-    setFavIds(ids);
-  }, []);
-
-  const addToFav = (value) => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-    const exists = favMovies.some((movie) => movie.id === value);
-    if (!exists) {
-      const updated = [...favMovies, { id: value }];
-      localStorage.setItem("favMovies", JSON.stringify(updated));
-
-      setFavIds([...favIds, value]);
-      setMessage("Movie added to favorites");
-    } else {
-      setMessage("Already added to favorites");
-    }
-    setTimeout(() => {
-      setMessage("");
-    }, 2000);
+  // Next Slide
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === moviePosters.length - 1 ? 0 : prev + 1));
   };
 
-  const noPoster =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
+  // Prev Slide
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? moviePosters.length - 1 : prev - 1));
+  };
+
+  // Touch Start
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  // Touch End
+  const handleTouchEnd = (e) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+
+    const distance = touchStartX.current - touchEndX.current;
+
+    // Swipe Left
+    if (distance > 50) {
+      nextSlide();
+    }
+
+    // Swipe Right
+    if (distance < -50) {
+      prevSlide();
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   return (
-    <div className="min-h-screen w-full p-5 bg-slate-950 flex flex-col gap-5">
-      <div className="flex flex-col items-center gap-5 fixed top-0 left-0 bg-slate-950 w-full py-5 px-4">
+    <div className="relative min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5 overflow-hidden">
+      {/* background gradient  */}
+      <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
+      <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
+
+      <div className="fixed z-20 flex flex-col items-center top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
         <Header />
-        <SearchBar
-          search={search}
-          setSearch={setSearch}
-          setIsSearching={setIsSearching}
-        />
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center pt-32">
+        <div className="flex justify-center items-center pt-15">
           <HomeLoader />
         </div>
       ) : (
-        <div>
-          <div className="grid grid-cols-2 gap-5 pt-32 pb-3 w-full">
-            {movies.map((elem, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className="flex flex-col text-center items-center gap-2 w-full pb-3 border border-slate-700 rounded bg-slate-900"
-                >
-                  <div
-                    onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                    className="h-60 w-full"
-                  >
-                    <img
-                      className="w-full h-60 rounded object-cover"
-                      src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
-                      onError={(e) => (e.target.src = noPoster)}
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between items-center gap-5 h-full px-2">
-                    <h1 className="text-white text-lg font-semibold">
-                      {elem.Title}
-                    </h1>
-                    <button
-                      onClick={() => {
-                        addToFav(elem.imdbID);
-                      }}
-                      className="text-black bg-white px-3 rounded py-1 font-semibold w-fit"
-                    >
-                      {favIds.includes(elem.imdbID)
-                        ? "✅ Added to Fav"
-                        : "❤️ Add to Fav"}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <Buttons page={page} setPage={setPage} />
-          {message && (
-            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white text-black rounded">
-              {message}
+        <div className="relative z-10 pt-15">
+          <div
+            className="w-full h-fit overflow-hidden bg-slate-950 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Slides */}
+            <div
+              className="flex h-fit transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${current * 100}%)`,
+              }}
+            >
+              {moviePosters.map((movie, index) => (
+                <img
+                  key={index}
+                  src={movie}
+                  className="w-full h-fit object-cover shrink-0"
+                />
+              ))}
             </div>
-          )}
+          </div>
+
+          <div className="pt-5">
+            <Action />
+            <Cartoons />
+            <TvShows />
+            <Comedy />
+            <TopRated />
+          </div>
         </div>
       )}
     </div>
   );
 };
-
 export default Home;
