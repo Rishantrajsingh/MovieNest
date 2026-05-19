@@ -6,6 +6,7 @@ import HomeLoader from "./HomeLoader";
 
 const Action = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+  // const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
   const actionMovies = [
     "John Wick",
