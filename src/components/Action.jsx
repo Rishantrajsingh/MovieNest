@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import HomeLoader from "./HomeLoader";
 
 const Action = () => {
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
   const actionMovies = [
     "John Wick",
     "Mad Max: Fury Road",
@@ -15,23 +19,23 @@ const Action = () => {
     "The Matrix",
     "Extraction",
     "Nobody",
-    "Fast & Furious 7",
+    "Bullet Train",
     "Casino Royale",
     "Terminator 2: Judgment Day",
     "The Raid",
   ];
 
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
       try {
         const requests = actionMovies.map((name) =>
           axios.get(
-            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=900e3577`,
+            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
-
         const responses = await Promise.all(requests);
         const movie = responses.map((res) => res.data);
         setMovies(movie);
@@ -46,8 +50,7 @@ const Action = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="pt-10 pl-3 pb-3">
-      {/* <p className="text-white font-semibold text-xl">Action Reloaded &gt;</p> */}
+    <div className="pt-5 pl-3 pb-3">
       <NavLink to="/action" className="text-white font-semibold text-xl">
         Action Reloaded &gt;
       </NavLink>
@@ -58,10 +61,7 @@ const Action = () => {
               key={idx}
               className="flex items-center justify-center rounded no-scrollbar"
             >
-              <div
-                onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                className="w-50 h-full rounded overflow-hidden"
-              >
+              <div className="w-50 h-full rounded overflow-hidden">
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="rounded object-contain"

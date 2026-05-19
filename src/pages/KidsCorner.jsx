@@ -1,8 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
+import { useNavigate } from "react-router-dom";
+import CategoryLoader from "../components/CategoryLoader";
 
 const KidsCorner = () => {
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
   const kidsCartoons = [
     "Doraemon",
     "Dragon Tales",
@@ -54,71 +58,24 @@ const KidsCorner = () => {
     "Despicable Me",
     "Despicable Me 2",
     "Despicable Me 3",
-    "The Secret Life of Pets",
-    "Rio",
-    "Rio 2",
-    "Ice Age",
-    "Ice Age: The Meltdown",
-    "Ice Age: Dawn of the Dinosaurs",
-    "Madagascar",
-    "Madagascar 2",
-    "Madagascar 3",
-    "How to Train Your Dragon",
-    "How to Train Your Dragon 2",
-    "How to Train Your Dragon: The Hidden World",
-    "The Croods",
-    "The Boss Baby",
-    "Hotel Transylvania",
-    "Hotel Transylvania 2",
-    "Hotel Transylvania 3",
-    "Tangled",
-    "Brave",
-    "The Lion King",
-    "Aladdin",
-    "Beauty and the Beast",
-    "The Little Mermaid",
-    "Bolt",
-    "Hercules",
-    "Tarzan",
-    "Mulan",
-    "Kung Fu Panda 2",
-    "Kung Fu Panda 3",
-    "Megamind",
-    "The Lego Movie",
-    "The Lego Batman Movie",
-    "Sing",
-    "Sing 2",
-    "Bee Movie",
-    "Monsters, Inc.",
-    "Monsters University",
-    "Cloudy with a Chance of Meatballs",
-    "The Angry Birds Movie",
-    "The Angry Birds Movie 2",
-    "Puss in Boots",
-    "Puss in Boots: The Last Wish",
-    "Teenage Mutant Ninja Turtles",
-    "Turbo",
-    "Open Season",
-    "Arthur Christmas",
-    "Paddington",
-    "Paddington 2",
-    "Spies in Disguise",
   ];
-
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
       try {
         const requests = kidsCartoons.map((name) =>
           axios.get(
-            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=900e3577`,
+            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
 
         const responses = await Promise.all(requests);
         const movie = responses.map((res) => res.data);
         setMovies(movie);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -130,26 +87,37 @@ const KidsCorner = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
-      <div className="fixed z-10 flex flex-col items-center gap-5 top-0 left-0 bg-slate-950 w-full py-5 px-4">
+    <div className="relative overflow-hidden min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
+      {/* background gradient  */}
+      <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
+      <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
+
+      <div className="fixed z-20 flex flex-col items-center top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
         <Header />
       </div>
 
-      <div className="grid grid-cols-3 gap-2 px-2 pt-16 pb-5">
-        {movies.map((elem, idx) => {
-          return (
-            <div key={idx}>
-              <div className="">
-                <img
-                  className="rounded object-contain"
-                  src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
-                  onError={(e) => (e.target.src = noPoster)}
-                />
+      {loading ? (
+        <div className="flex justify-center items-center pt-15">
+          <CategoryLoader />
+        </div>
+      ) : (
+        <div className="relative z-10 grid grid-cols-3 gap-2 px-2 pt-16 pb-5">
+          {movies.map((elem, idx) => {
+            return (
+              <div key={idx}>
+                <div>
+                  <img
+                    onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                    className="rounded object-contain"
+                    src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
+                    onError={(e) => (e.target.src = noPoster)}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

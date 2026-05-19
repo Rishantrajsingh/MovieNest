@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Cartoons = () => {
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
   const kidsCartoons = [
     "Doraemon",
     "Dragon Tales",
@@ -22,13 +24,14 @@ const Cartoons = () => {
   ];
 
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
       try {
         const requests = kidsCartoons.map((name) =>
           axios.get(
-            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=900e3577`,
+            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
 
@@ -48,7 +51,7 @@ const Cartoons = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="pt-10 pl-3 pb-3">
+    <div className="pt-5 pl-3 pb-3">
       <NavLink to="/kidscorner" className="text-white font-semibold text-xl">
         Kid's Corner &gt;
       </NavLink>
@@ -57,11 +60,11 @@ const Cartoons = () => {
           return (
             <div key={idx} className="flex items-center justify-center rounded">
               <div
-                // onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                onClick={() => navigate(`/movie/${elem.imdbID}`)}
                 className="w-50 h-full rounded overflow-hidden"
               >
                 <img
-                  // onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                  onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="rounded object-contain"
                   src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
                   onError={(e) => (e.target.src = noPoster)}

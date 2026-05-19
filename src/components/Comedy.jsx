@@ -1,8 +1,10 @@
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import Header from "../components/Header";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const KidsCorner = () => {
+const Comedy = () => {
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
   const comedyMovies = [
     "The Hangover",
     "Superbad",
@@ -20,15 +22,15 @@ const KidsCorner = () => {
     "Bhool Bhulaiyaa",
     "Welcome",
   ];
-
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
       try {
         const requests = comedyMovies.map((name) =>
           axios.get(
-            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=900e3577`,
+            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
 
@@ -46,17 +48,24 @@ const KidsCorner = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
-      <div className="fixed z-10 flex flex-col items-center gap-5 top-0 left-0 bg-slate-950 w-full py-5 px-4">
-        <Header />
-      </div>
-
-      <div className="grid grid-cols-3 gap-2 px-2 pt-16 pb-5">
+    <div className="pt-5 pl-3 pb-3">
+      {/* <p className="text-white font-semibold text-xl">Action Reloaded &gt;</p> */}
+      <NavLink to="/comedy" className="text-white font-semibold text-xl">
+        Comedy Fully Loaded &gt;
+      </NavLink>
+      <div className="flex gap-2 w-full py-2 overflow-auto no-scrollbar">
         {movies.map((elem, idx) => {
           return (
-            <div key={idx}>
-              <div className="">
+            <div
+              key={idx}
+              className="flex items-center justify-center rounded no-scrollbar"
+            >
+              <div
+                onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                className="w-50 h-full rounded overflow-hidden"
+              >
                 <img
+                  onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="rounded object-contain"
                   src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
                   onError={(e) => (e.target.src = noPoster)}
@@ -70,4 +79,4 @@ const KidsCorner = () => {
   );
 };
 
-export default KidsCorner;
+export default Comedy;
