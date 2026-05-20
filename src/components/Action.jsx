@@ -3,6 +3,7 @@ import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import HomeLoader from "./HomeLoader";
+import apiCache from "../../utils/apiCache";
 
 const Action = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -33,13 +34,12 @@ const Action = () => {
     const getData = async () => {
       try {
         const requests = actionMovies.map((name) =>
-          axios.get(
+          apiCache(
             `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
         const responses = await Promise.all(requests);
-        const movie = responses.map((res) => res.data);
-        setMovies(movie);
+        setMovies(responses);
       } catch (error) {
         console.log(error);
       }

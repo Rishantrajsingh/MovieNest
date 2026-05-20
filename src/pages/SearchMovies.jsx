@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CategoryLoader from "../components/CategoryLoader";
+import apiCache from "../../utils/apiCache";
+import { time } from "framer-motion";
 
 const SearchMovies = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -60,48 +62,82 @@ const SearchMovies = () => {
     "Puss in Boots: The Last Wish",
   ];
 
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const getDefaultMovies = async () => {
-    try {
-      const requests = searchPageMovies.map((movie) =>
-        axios.get(`https://www.omdbapi.com/?apikey=${apiKey}&t=${movie}`),
-      );
-      const responses = await Promise.all(requests);
-      const data = responses.map((res) => res.data);
-      setMovies(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const searchMovies = async () => {
-    setLoading(true);
-    try {
-      const responses = await axios.get(
-        `https://www.omdbapi.com/?s=${encodeURIComponent(search)}&apikey=${apiKey}`,
-      );
-      setMovies(responses.data.Search || []);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const getDefaultMovies = async () => {
+      try {
+        const requests = searchPageMovies.map((name) =>
+          apiCache(
+            `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
+          ),
+        );
+
+        const responses = await Promise.all(requests);
+        setMovies(responses);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getDefaultMovies();
   }, []);
 
-  const handleKeyDown = (e) => {
+  useEffect(() => {
+    if (query.trim().length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          `https://www.omdbapi.com/?apikey=${apiKey}&s=${query}`,
+        );
+
+        if (!res.data.Search) {
+          setSuggestions([]);
+          return;
+        }
+
+        setSuggestions(
+          res.data.Search.slice(0, 5).map((movie) => ({
+            id: movie.imdbID,
+            title: movie.Title,
+            poster: movie.Poster,
+            year: movie.Year,
+          })),
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      if (search.trim() === "") {
-        getRandomMovies();
-      } else {
-        searchMovies();
+      try {
+        setLoading(true);
+
+        const res = await axios.get(
+          `https://www.omdbapi.com/?apikey=${apiKey}&s=${query}`,
+        );
+
+        if (res.data.Search) {
+          setMovies(res.data.Search);
+        }
+
+        setSuggestions([]);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
       }
     }
   };
@@ -118,14 +154,41 @@ const SearchMovies = () => {
       <div className="fixed z-20 top-0 left-0 w-full bg-slate-950/10 flex justify-center items-center px-3 py-4 gap-3 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
         <input
           type="text"
-          value={search}
+          value={query}
           onChange={(e) => {
-            setSearch(e.target.value);
+            setQuery(e.target.value);
           }}
           onKeyDown={handleKeyDown}
           placeholder="Search for movies ..."
           className="outline-none border-none px-5 py-2 w-full text-xl rounded-full bg-white text-black"
         />
+        {/* SUGGESTIONS */}
+        {suggestions.length > 0 && (
+          <div className="absolute top-full left-0 w-full bg-slate-900 border rounded-lg overflow-hidden z-50">
+            {suggestions.map((movie) => (
+              <div
+                key={movie.id}
+                className="flex items-center gap-3 p-3"
+                onClick={() => {
+                  setQuery(movie.title);
+                  setSuggestions([]);
+                }}
+              >
+                {/* <img
+                  src={movie.poster}
+                  alt={movie.title}
+                  className="w-12 h-16 object-cover rounded"
+                /> */}
+                <div>
+                  <h1 className="text-white text-sm font-semibold">
+                    {movie.title}
+                  </h1>
+                  {/* <p className="text-zinc-400 text-xs">{movie.year}</p> */}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {loading ? (

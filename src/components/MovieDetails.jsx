@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import DetailsLoader from "./DetailsLoader";
+import apiCache from "../../utils/apiCache";
 
 const MovieDetails = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -15,10 +16,10 @@ const MovieDetails = () => {
 
   useEffect(() => {
     const fetchMovie = async () => {
-      const res = await axios.get(
+      const res = await apiCache(
         `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`,
       );
-      setMovie(res.data);
+      setMovie(res);
       setLoading(false);
     };
     fetchMovie();

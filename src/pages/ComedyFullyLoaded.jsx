@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import CategoryLoader from "../components/CategoryLoader";
+import apiCache from "../../utils/apiCache";
 
 const ComedyFullyLoaded = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -68,14 +69,13 @@ const ComedyFullyLoaded = () => {
     const getData = async () => {
       try {
         const requests = comedyMovies.map((name) =>
-          axios.get(
+          apiCache(
             `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
 
         const responses = await Promise.all(requests);
-        const movie = responses.map((res) => res.data);
-        setMovies(movie);
+        setMovies(responses);
         setLoading(false);
       } catch (error) {
         console.log(error);

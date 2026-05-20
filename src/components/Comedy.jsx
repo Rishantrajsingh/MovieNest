@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
+import apiCache from "../../utils/apiCache";
 
 const Comedy = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -29,14 +30,13 @@ const Comedy = () => {
     const getData = async () => {
       try {
         const requests = comedyMovies.map((name) =>
-          axios.get(
+          apiCache(
             `https://www.omdbapi.com/?t=${encodeURIComponent(name)}&apikey=${apiKey}`,
           ),
         );
 
         const responses = await Promise.all(requests);
-        const movie = responses.map((res) => res.data);
-        setMovies(movie);
+        setMovies(responses);
       } catch (error) {
         console.log(error);
       }
@@ -49,7 +49,6 @@ const Comedy = () => {
 
   return (
     <div className="pt-5 pl-3 pb-3">
-      {/* <p className="text-white font-semibold text-xl">Action Reloaded &gt;</p> */}
       <NavLink to="/comedy" className="text-white font-semibold text-xl">
         Comedy Fully Loaded &gt;
       </NavLink>

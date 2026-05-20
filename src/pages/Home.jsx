@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HomeLoader from "../components/HomeLoader";
 import Header from "../components/Header";
-import SearchBar from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
 import Action from "../components/Action";
 import Cartoons from "../components/Cartoons";

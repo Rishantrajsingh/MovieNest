@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CategoryLoader from "../components/CategoryLoader";
+import apiCache from "../../utils/apiCache";
 
 const Favorites = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -18,9 +19,8 @@ const Favorites = () => {
       const urls = favMovies.map((value) => {
         return `https://www.omdbapi.com/?i=${value.id}&apikey=${apiKey}`;
       });
-      const responses = await Promise.all(urls.map((url) => axios.get(url)));
-      const data = responses.map((res) => res.data);
-      setMovies(data);
+      const responses = await Promise.all(urls.map((url) => apiCache(url)));
+      setMovies(responses);
     };
     fetchMovies();
     setInterval(() => {
