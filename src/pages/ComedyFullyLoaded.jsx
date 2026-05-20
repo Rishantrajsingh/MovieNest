@@ -102,18 +102,16 @@ const ComedyFullyLoaded = () => {
           <CategoryLoader />
         </div>
       ) : (
-        <div className="relative z-10 grid grid-cols-3 gap-2 px-2 pt-16 pb-5">
+        <div className="relative z-10 grid grid-cols-3 md:grid-cols-4 justify-items-center md:justify-items-center gap-2 px-2 pt-16 md:pt-20 pb-5">
           {movies.map((elem, idx) => {
             return (
-              <div key={idx}>
-                <div>
-                  <img
-                    onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                    className="rounded object-contain"
-                    src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
-                    onError={(e) => (e.target.src = noPoster)}
-                  />
-                </div>
+              <div key={idx} className="w-30 md:w-45">
+                <img
+                  onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                  className="rounded object-contain"
+                  src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
+                  onError={(e) => (e.target.src = noPoster)}
+                />
               </div>
             );
           })}

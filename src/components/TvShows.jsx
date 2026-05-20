@@ -51,17 +51,17 @@ const TvShows = () => {
 
   return (
     <div className="pt-5 pl-3 pb-3">
-      <NavLink to="/tvshows" className="text-white font-semibold text-xl">
-        Tv Show's &gt;
+      <NavLink
+        to="/tvshows"
+        className="text-white font-semibold text-xl md:text-2xl"
+      >
+        Tv Show's
       </NavLink>
-      <div className="flex gap-2 w-full py-2 overflow-auto no-scrollbar">
+      <div className="flex gap-2 w-full py-2 overflow-auto pr-3">
         {movies.map((elem, idx) => {
           return (
-            <div
-              key={idx}
-              className="flex items-center justify-center rounded no-scrollbar"
-            >
-              <div className="w-50 h-full rounded overflow-hidden">
+            <div key={idx} className="flex items-center justify-center rounded">
+              <div className="w-50 md:w-45 h-full rounded overflow-hidden">
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="rounded object-contain"

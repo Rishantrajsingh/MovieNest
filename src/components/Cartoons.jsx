@@ -50,16 +50,19 @@ const Cartoons = () => {
 
   return (
     <div className="pt-5 pl-3 pb-3">
-      <NavLink to="/kidscorner" className="text-white font-semibold text-xl">
-        Kid's Corner &gt;
+      <NavLink
+        to="/kidscorner"
+        className="text-white font-semibold text-xl md:text-2xl"
+      >
+        Kid's Corner
       </NavLink>
-      <div className="flex gap-2 w-full py-2 overflow-x-auto">
+      <div className="flex gap-2 w-full py-2 overflow-auto pr-3">
         {movies.map((elem, idx) => {
           return (
             <div key={idx} className="flex items-center justify-center rounded">
               <div
                 onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                className="w-50 h-full rounded overflow-hidden"
+                className="w-50 md:w-45 h-full rounded overflow-hidden"
               >
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}

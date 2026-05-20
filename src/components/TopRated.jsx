@@ -50,19 +50,19 @@ const TopRated = () => {
 
   return (
     <div className="pt-5 pl-3 pb-3">
-      <NavLink to="/toprated" className="text-white font-semibold text-xl">
-        Top Rated Movies &gt;
+      <NavLink
+        to="/toprated"
+        className="text-white font-semibold text-xl md:text-2xl"
+      >
+        Top Rated Movies
       </NavLink>
-      <div className="flex gap-2 w-full py-2 overflow-auto no-scrollbar">
+      <div className="flex gap-2 w-full py-2 overflow-auto pr-3">
         {movies.map((elem, idx) => {
           return (
-            <div
-              key={idx}
-              className="flex items-center justify-center rounded no-scrollbar"
-            >
+            <div key={idx} className="flex items-center justify-center rounded">
               <div
                 onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                className="w-50 h-full rounded overflow-hidden"
+                className="w-50 md:w-45 h-full rounded overflow-hidden"
               >
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}

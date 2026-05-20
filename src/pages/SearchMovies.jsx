@@ -37,6 +37,31 @@ const SearchMovies = () => {
     "Cars",
     "Shershaah",
     "The Lion King",
+    "Mission: Impossible – Fallout",
+    "Coco",
+    "War",
+    "Jumanji",
+    "The Prestige",
+    "Minions",
+    "URI: The Surgical Strike",
+    "Mad Max: Fury Road",
+    "Up",
+    "Dhamaal",
+    "Doctor Strange",
+    "Hotel Transylvania",
+    "Don",
+    "The Batman",
+    "Moana",
+    "Free Guy",
+    "Animal",
+    "Singham",
+    "The Incredibles",
+    "Rush Hour",
+    "Krrish",
+    "Zootopia",
+    "The Wolf of Wall Street",
+    "Leo",
+    "Puss in Boots: The Last Wish",
   ];
 
   const [query, setQuery] = useState("");
@@ -223,9 +248,9 @@ const SearchMovies = () => {
           <CategoryLoader />
         </div>
       ) : (
-        <div className="relative z-10 grid grid-cols-3 gap-3 px-3 pt-24 pb-5">
+        <div className="relative z-10 grid grid-cols-3 md:grid-cols-4 justify-items-center md:justify-items-center gap-2 px-2 pt-16 md:pt-20 pb-5">
           {movies.map((movie, idx) => (
-            <div key={idx}>
+            <div key={idx} className="w-30 md:w-45">
               <img
                 onClick={() => navigate(`/movie/${movie.imdbID}`)}
                 className="rounded-lg object-cover cursor-pointer hover:scale-105 transition"

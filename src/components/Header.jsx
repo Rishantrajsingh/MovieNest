@@ -3,7 +3,7 @@ import { Heart, Search } from "lucide-react";
 
 const Header = () => {
   return (
-    <div className="flex justify-between items-center w-full ">
+    <div className="flex justify-between items-center w-full md:px-5">
       <Link to="/">
         <h1 className="text-4xl font-bold text-white">
           Movie<span className="text-yellow-400">Nest</span>

@@ -13,9 +13,10 @@ const Home = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
   const moviePosters = [
-    "/images/banner3.png",
-    "/images/banner2.png",
-    "/images/banner1.png",
+    // "/images/banner3.png",
+    // "/images/banner2.png",
+    // "/images/banner1.png",
+    "/images/homebanner.png",
   ];
 
   const [current, setCurrent] = useState(0);
@@ -95,7 +96,7 @@ const Home = () => {
           >
             {/* Slides */}
             <div
-              className="flex h-fit transition-transform duration-500 ease-in-out"
+              className="flex w-full h-fit transition-transform duration-500 ease-in-out"
               style={{
                 transform: `translateX(-${current * 100}%)`,
               }}
