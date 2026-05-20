@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CategoryLoader from "../components/CategoryLoader";
@@ -6,7 +6,10 @@ import apiCache from "../../utils/apiCache";
 
 const SearchMovies = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+
   const navigate = useNavigate();
+
+  const isSearched = useRef(false);
 
   const searchPageMovies = [
     "Inception",
@@ -34,31 +37,6 @@ const SearchMovies = () => {
     "Cars",
     "Shershaah",
     "The Lion King",
-    "Mission: Impossible – Fallout",
-    "Coco",
-    "War",
-    "Jumanji",
-    "The Prestige",
-    "Minions",
-    "URI: The Surgical Strike",
-    "Mad Max: Fury Road",
-    "Up",
-    "Dhamaal",
-    "Doctor Strange",
-    "Hotel Transylvania",
-    "Don",
-    "The Batman",
-    "Moana",
-    "Free Guy",
-    "Animal",
-    "Singham",
-    "The Incredibles",
-    "Rush Hour",
-    "Krrish",
-    "Zootopia",
-    "The Wolf of Wall Street",
-    "Leo",
-    "Puss in Boots: The Last Wish",
   ];
 
   const [query, setQuery] = useState("");
@@ -139,10 +117,14 @@ const SearchMovies = () => {
       if (res.data.Search) {
         setMovies(res.data.Search);
 
-        // save searched movies
-        localStorage.setItem("searchedMovies", JSON.stringify(res.data.Search));
+        isSearched.current = true;
 
-        localStorage.setItem("searchedQuery", searchText);
+        sessionStorage.setItem(
+          "searchedMovies",
+          JSON.stringify(res.data.Search),
+        );
+
+        sessionStorage.setItem("searchedQuery", searchText);
       }
 
       setLoading(false);
@@ -158,8 +140,8 @@ const SearchMovies = () => {
       setShowSuggestions(false);
 
       if (query.trim() === "") {
-        localStorage.removeItem("searchedMovies");
-        localStorage.removeItem("searchedQuery");
+        sessionStorage.removeItem("searchedMovies");
+        sessionStorage.removeItem("searchedQuery");
 
         getDefaultMovies();
       } else {
@@ -170,14 +152,24 @@ const SearchMovies = () => {
 
   // ---------------- INITIAL LOAD ----------------
   useEffect(() => {
-    const savedMovies = localStorage.getItem("searchedMovies");
+    const savedMovies = sessionStorage.getItem("searchedMovies");
+
+    const savedQuery = sessionStorage.getItem("searchedQuery");
 
     if (savedMovies) {
       setMovies(JSON.parse(savedMovies));
+      setQuery(savedQuery || "");
       setLoading(false);
     } else {
       getDefaultMovies();
     }
+
+    return () => {
+      if (!isSearched.current) {
+        sessionStorage.removeItem("searchedMovies");
+        sessionStorage.removeItem("searchedQuery");
+      }
+    };
   }, []);
 
   return (
