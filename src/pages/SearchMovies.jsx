@@ -139,10 +139,13 @@ const SearchMovies = () => {
       if (res.data.Search) {
         setMovies(res.data.Search);
 
-        // save searched movies
-        localStorage.setItem("searchedMovies", JSON.stringify(res.data.Search));
+        // save search temporarily
+        sessionStorage.setItem(
+          "searchedMovies",
+          JSON.stringify(res.data.Search),
+        );
 
-        localStorage.setItem("searchedQuery", searchText);
+        sessionStorage.setItem("searchedQuery", searchText);
       }
 
       setLoading(false);
@@ -158,8 +161,8 @@ const SearchMovies = () => {
       setShowSuggestions(false);
 
       if (query.trim() === "") {
-        localStorage.removeItem("searchedMovies");
-        localStorage.removeItem("searchedQuery");
+        sessionStorage.removeItem("searchedMovies");
+        sessionStorage.removeItem("searchedQuery");
 
         getDefaultMovies();
       } else {
@@ -170,8 +173,9 @@ const SearchMovies = () => {
 
   // ---------------- INITIAL LOAD ----------------
   useEffect(() => {
-    const savedMovies = localStorage.getItem("searchedMovies");
-    const savedQuery = localStorage.getItem("searchedQuery");
+    const savedMovies = sessionStorage.getItem("searchedMovies");
+
+    const savedQuery = sessionStorage.getItem("searchedQuery");
 
     if (savedMovies) {
       setMovies(JSON.parse(savedMovies));
