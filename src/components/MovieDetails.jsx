@@ -56,7 +56,7 @@ const MovieDetails = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="relative overflow-hidden min-h-screen w-full p-5 bg-slate-950 flex flex-col gap-5">
+    <div className="relative overflow-hidden min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
       {/* background gradient  */}
       <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
       <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
@@ -69,7 +69,7 @@ const MovieDetails = () => {
           <DetailsLoader />
         </div>
       ) : (
-        <div className="relative z-10 mt-20 flex flex-col items-center">
+        <div className="relative z-10 mt-20 flex flex-col items-center px-2">
           <div className="text-white flex flex-col items-start">
             <img
               src={movie.Poster !== "N/A" ? movie.Poster : noPoster}

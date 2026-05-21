@@ -87,30 +87,28 @@ const Favorites = () => {
         <div className="relative z-10 pt-20 px-2 text-right">
           <button
             onClick={clearAllFavorites}
-            className="text-white font-semibold text-xl mr-2"
+            className="text-white font-semibold text-xl md:text-2xl mr-2"
           >
             Clear all
           </button>
-          <div className="relative z-10 grid grid-cols-3 gap-2 pt-5 pb-5">
+          <div className="z-10 grid grid-cols-3 md:grid-cols-4 gap-2 pt-5 pb-5 justify-items-center">
             {movies.map((elem, idx) => {
               return (
-                <div key={idx}>
-                  <div className="relative">
-                    <img
-                      onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                      className="rounded object-contain cursor-pointer"
-                      src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
-                      onError={(e) => (e.target.src = noPoster)}
-                    />
+                <div key={idx} className="relative w-fit md:w-fit">
+                  <img
+                    onClick={() => navigate(`/movie/${elem.imdbID}`)}
+                    className="w-35 md:w-45 rounded object-contain"
+                    src={elem.Poster !== "N/A" ? elem.Poster : noPoster}
+                    onError={(e) => (e.target.src = noPoster)}
+                  />
 
-                    {/* remove single movie */}
-                    <button
-                      onClick={() => removeFromFav(elem.imdbID)}
-                      className="absolute top-2 right-2 bg-white text-red-500 text-xs px-2 py-1 rounded"
-                    >
-                      X
-                    </button>
-                  </div>
+                  {/* remove single movie */}
+                  <button
+                    onClick={() => removeFromFav(elem.imdbID)}
+                    className="absolute top-2 right-2 bg-white text-red-500 text-xs px-2 py-1 rounded"
+                  >
+                    X
+                  </button>
                 </div>
               );
             })}
