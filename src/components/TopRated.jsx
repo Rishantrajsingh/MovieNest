@@ -62,7 +62,7 @@ const TopRated = () => {
             <div key={idx} className="flex items-center justify-center rounded">
               <div
                 onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                className="w-50 md:w-45 h-full rounded overflow-hidden"
+                className="w-35 md:w-45 h-full rounded overflow-hidden"
               >
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
