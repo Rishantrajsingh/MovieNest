@@ -248,7 +248,7 @@ const SearchMovies = () => {
           <CategoryLoader />
         </div>
       ) : (
-        <div className="relative z-10 grid grid-cols-3 md:grid-cols-4 justify-items-center md:justify-items-center gap-2 px-2 pt-16 md:pt-20 pb-5">
+        <div className="relative z-10 grid grid-cols-3 md:grid-cols-4 justify-items-center gap-2 px-2 pt-16 md:pt-20 pb-5">
           {movies.map((movie, idx) => (
             <div key={idx} className="w-30 md:w-45">
               <img

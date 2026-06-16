@@ -8,14 +8,11 @@ const Favorites = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
-      setLoading(true);
-
       const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
 
       const urls = favMovies.map((value) => {
