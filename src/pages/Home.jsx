@@ -10,62 +10,7 @@ import Comedy from "../components/Comedy";
 import TopRated from "../components/TopRated";
 
 const Home = () => {
-  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
-
-  const moviePosters = [
-    // "/images/banner3.png",
-    // "/images/banner2.png",
-    // "/images/banner1.png",
-    "/images/homebanner.png",
-  ];
-
-  const [current, setCurrent] = useState(0);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
   const [loading, setLoading] = useState(true);
-
-  // Auto Slide
-  useEffect(() => {
-    if (!moviePosters?.length) return;
-
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev === moviePosters.length - 1 ? 0 : prev + 1));
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [moviePosters]);
-
-  // Next Slide
-  const nextSlide = () => {
-    setCurrent((prev) => (prev === moviePosters.length - 1 ? 0 : prev + 1));
-  };
-
-  // Prev Slide
-  const prevSlide = () => {
-    setCurrent((prev) => (prev === 0 ? moviePosters.length - 1 : prev - 1));
-  };
-
-  // Touch Start
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  // Touch End
-  const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].clientX;
-
-    const distance = touchStartX.current - touchEndX.current;
-
-    // Swipe Left
-    if (distance > 50) {
-      nextSlide();
-    }
-
-    // Swipe Right
-    if (distance < -50) {
-      prevSlide();
-    }
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -89,26 +34,12 @@ const Home = () => {
         </div>
       ) : (
         <div className="relative z-10 pt-15">
-          <div
-            className="w-full h-fit overflow-hidden bg-slate-950 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            {/* Slides */}
-            <div
-              className="flex w-full h-fit transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${current * 100}%)`,
-              }}
-            >
-              {moviePosters.map((movie, index) => (
-                <img
-                  key={index}
-                  src={movie}
-                  className="w-full h-fit object-cover shrink-0"
-                />
-              ))}
-            </div>
+          <div className="w-full h-fit overflow-hidden bg-slate-950 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
+            <img
+              src="/images/homebanner.png"
+              alt="could not load image"
+              className="w-full h-fit object-cover shrink-0"
+            />
           </div>
 
           <div className="pt-5">

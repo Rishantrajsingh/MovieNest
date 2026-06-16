@@ -17,7 +17,6 @@ const apiCache = async (url) => {
       const cacheLimit = 24 * 60 * 60 * 1000;
 
       if (currentTime - parsedData.time < cacheLimit) {
-        console.log("Loaded from cache");
         return parsedData.data;
       }
 
@@ -26,7 +25,6 @@ const apiCache = async (url) => {
     }
 
     // fetch new data
-    console.log("Loaded from API");
 
     const response = await axios.get(url);
     const data = response.data;
@@ -38,7 +36,6 @@ const apiCache = async (url) => {
     };
 
     localStorage.setItem(cacheKey, JSON.stringify(cacheObject));
-
     return data;
   } catch (error) {
     console.log(error);

@@ -102,10 +102,10 @@ const ActionReloaded = () => {
           <CategoryLoader />
         </div>
       ) : (
-        <div className="relative z-10 grid grid-cols-3 md:grid-cols-4 justify-items-center gap-2 px-2 pt-16 md:pt-20 pb-5">
+        <div className="relative z-10 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 justify-items-center gap-2 px-2 pt-16 md:pt-20 pb-5">
           {movies.map((elem, idx) => {
             return (
-              <div key={idx} className="w-30 md:w-45">
+              <div key={idx} className="w-30 md:w-45 lg:w-55">
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
                   className="rounded object-contain"

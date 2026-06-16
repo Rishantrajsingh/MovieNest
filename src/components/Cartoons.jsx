@@ -49,20 +49,20 @@ const Cartoons = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
 
   return (
-    <div className="pt-5 pl-3 pb-3">
+    <div className="pt-5 pb-3">
       <NavLink
         to="/kidscorner"
-        className="text-white font-semibold text-xl md:text-2xl"
+        className="text-white font-semibold text-xl md:text-2xl pl-3"
       >
         Kid's Corner
       </NavLink>
-      <div className="flex gap-2 w-full py-2 overflow-auto pr-3">
+      <div className="flex gap-2 w-full py-2 overflow-auto px-3">
         {movies.map((elem, idx) => {
           return (
             <div key={idx} className="flex items-center justify-center rounded">
               <div
                 onClick={() => navigate(`/movie/${elem.imdbID}`)}
-                className="w-35 md:w-45 h-full rounded overflow-hidden"
+                className="w-35 md:w-45 lg:w-55 h-full rounded overflow-hidden"
               >
                 <img
                   onClick={() => navigate(`/movie/${elem.imdbID}`)}
