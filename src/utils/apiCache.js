@@ -17,9 +17,10 @@ const apiCache = async (url) => {
       const cacheLimit = 24 * 60 * 60 * 1000;
 
       if (currentTime - parsedData.time < cacheLimit) {
+        console.log("api hit");
         return parsedData.data;
       }
-
+      console.log("api expired");
       // remove old cache
       localStorage.removeItem(cacheKey);
     }

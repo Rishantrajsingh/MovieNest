@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import DetailsLoader from "./DetailsLoader";
-import apiCache from "../../utils/apiCache";
+import apiCache from "../utils/apiCache";
+import { getMovieDetails } from "../service/movieDetailsApi";
+import { noPoster } from "../constants/imageConstants";
 
 const MovieDetails = () => {
-  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
-
   const { id } = useParams();
   const [movie, setMovie] = useState([]);
   const [favIds, setFavIds] = useState([]);
@@ -15,14 +15,12 @@ const MovieDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchMovie = async () => {
-      const res = await apiCache(
-        `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`,
-      );
-      setMovie(res);
+    const fetchDetails = async () => {
+      const data = await getMovieDetails(id);
+      setMovie(data);
       setLoading(false);
     };
-    fetchMovie();
+    fetchDetails();
   }, []);
 
   useEffect(() => {
@@ -52,9 +50,6 @@ const MovieDetails = () => {
     setFavIds(updated.map((m) => m.id));
   };
 
-  const noPoster =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYY-4QN85YJRDZ3twNWtHBpYgypmHu5ZZk0w&s";
-
   return (
     <div className="relative overflow-hidden min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
       {/* background gradient  */}
@@ -65,59 +60,62 @@ const MovieDetails = () => {
         <Header />
       </div>
       {loading ? (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mt-20">
           <DetailsLoader />
         </div>
       ) : (
-        <div className="relative z-10 mt-20 flex flex-col items-center px-2">
-          <div className="text-white flex flex-col items-start">
+        <div className="relative z-10 mt-20 flex flex-col items-center px-2 md:px-5">
+          <div className="w-full lg:w-fit h-screen text-white flex flex-col items-start md:flex-row md:justify-center md:gap-5">
             <img
               src={movie.Poster !== "N/A" ? movie.Poster : noPoster}
               onError={(e) => (e.target.src = noPoster)}
-              className="w-full h-auto rounded-lg mb-4"
+              className="w-full h-full rounded-lg mb-4"
             />
 
-            <h1 className="text-2xl font-bold mb-2">{movie.Title}</h1>
+            <div className="w-full">
+              <h1 className="text-2xl font-bold mb-2">{movie.Title}</h1>
 
-            <div className="text-sm text-gray-400 mb-3">
-              <p>Year: {movie.Year}</p>
-              <p>Genre: {movie.Genre}</p>
-              <p>Runtime: {movie.Runtime}</p>
-            </div>
+              <div className="text-sm text-gray-400 mb-3">
+                <p>Year: {movie.Year}</p>
+                <p>Genre: {movie.Genre}</p>
+                <p>Runtime: {movie.Runtime}</p>
+              </div>
 
-            <p className="text-yellow-400 font-semibold mb-4">
-              ⭐ {movie.imdbRating} / 10
-            </p>
-
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold mb-1">Plot</h2>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                {movie.Plot}
+              <p className="text-yellow-400 font-semibold mb-4">
+                ⭐ {movie.imdbRating} / 10
               </p>
+
+              <div className="mb-4">
+                <h2 className="text-lg font-semibold mb-1">Plot</h2>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {movie.Plot}
+                </p>
+              </div>
+
+              <p className="text-sm mb-1">
+                <span className="font-semibold">Director:</span>{" "}
+                {movie.Director}
+              </p>
+
+              <p className="text-sm mb-4">
+                <span className="font-semibold">Actors:</span> {movie.Actors}
+              </p>
+
+              <button
+                onClick={() => {
+                  if (favIds.includes(movie.imdbID)) {
+                    removeFromFav(movie.imdbID);
+                  } else {
+                    addToFav(movie.imdbID);
+                  }
+                }}
+                className="w-full bg-white hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
+              >
+                {favIds.includes(movie.imdbID)
+                  ? "💔 Remove from Fav"
+                  : "❤️ Add to Favorites"}
+              </button>
             </div>
-
-            <p className="text-sm mb-1">
-              <span className="font-semibold">Director:</span> {movie.Director}
-            </p>
-
-            <p className="text-sm mb-4">
-              <span className="font-semibold">Actors:</span> {movie.Actors}
-            </p>
-
-            <button
-              onClick={() => {
-                if (favIds.includes(movie.imdbID)) {
-                  removeFromFav(movie.imdbID);
-                } else {
-                  addToFav(movie.imdbID);
-                }
-              }}
-              className="w-full bg-white hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
-            >
-              {favIds.includes(movie.imdbID)
-                ? "💔 Remove from Fav"
-                : "❤️ Add to Favorites"}
-            </button>
           </div>
         </div>
       )}

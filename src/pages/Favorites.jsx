@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import CategoryLoader from "../components/CategoryLoader";
-import apiCache from "../../utils/apiCache";
+import apiCache from "../utils/apiCache";
+import { noPoster } from "../constants/imageConstants";
+import { getFavoriteMovies } from "../service/favoritesApi";
 
 const Favorites = () => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -13,19 +15,17 @@ const Favorites = () => {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+      try {
+        setLoading(true);
 
-      const urls = favMovies.map((value) => {
-        return `https://www.omdbapi.com/?i=${value.id}&apikey=${apiKey}`;
-      });
+        const data = await getFavoriteMovies();
 
-      const responses = await Promise.all(urls.map((url) => apiCache(url)));
-
-      setMovies(responses);
-
-      setTimeout(() => {
+        setMovies(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
         setLoading(false);
-      }, 1000);
+      }
     };
 
     fetchMovies();
