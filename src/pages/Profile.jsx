@@ -9,7 +9,7 @@ const Profile = () => {
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-zinc-900 rounded-2xl border border-zinc-800 shadow-xl p-8">
         {/* Avatar */}
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <FaUserCircle className="text-8xl text-red-500" />
 
           <h1 className="text-3xl font-bold text-white mt-4">
@@ -17,7 +17,7 @@ const Profile = () => {
           </h1>
 
           <p className="text-zinc-400 mt-2">{user.email}</p>
-        </div>
+        </div> */}
 
         {/* Divider */}
         <div className="border-t border-zinc-800 my-8"></div>
