@@ -3,11 +3,21 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import DetailsLoader from "./DetailsLoader";
-import apiCache from "../utils/apiCache";
 import { getMovieDetails } from "../service/movieDetailsApi";
 import { noPoster } from "../constants/imageConstants";
+import { useFirebase } from "../context/FirebaseContext";
+import {
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 const MovieDetails = () => {
+  const { user } = useFirebase();
+
   const { id } = useParams();
   const [movie, setMovie] = useState([]);
   const [favIds, setFavIds] = useState([]);
@@ -23,49 +33,80 @@ const MovieDetails = () => {
     fetchDetails();
   }, []);
 
+  // useEffect(() => {
+  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+  //   const ids = favMovies.map((m) => m.id);
+  //   setFavIds(ids);
+  // }, []);
+
   useEffect(() => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-    const ids = favMovies.map((m) => m.id);
-    setFavIds(ids);
-  }, []);
+    const fetchFavorites = async () => {
+      if (!user) return;
 
-  const addToFav = (value) => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-    const exists = favMovies.some((movie) => movie.id === value);
-    if (!exists) {
-      const updated = [...favMovies, { id: value }];
-      localStorage.setItem("favMovies", JSON.stringify(updated));
+      const snapshot = await getDocs(
+        collection(db, "users", user.uid, "favorites"),
+      );
+      const ids = snapshot.docs.map((doc) => doc.id);
+      setFavIds(ids);
+    };
+    fetchFavorites();
+  }, [user]);
 
-      setFavIds([...favIds, value]);
-    }
+  const addToFav = async (id) => {
+    if (!user) return;
+
+    await setDoc(doc(db, "users", user.uid, "favorites", id), {
+      id: id,
+    });
+
+    setFavIds((prev) => [...prev, id]);
   };
 
-  const removeFromFav = (id) => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+  // const addToFav = (value) => {
+  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+  //   const exists = favMovies.some((movie) => movie.id === value);
+  //   if (!exists) {
+  //     const updated = [...favMovies, { id: value }];
+  //     localStorage.setItem("favMovies", JSON.stringify(updated));
 
-    const updated = favMovies.filter((movie) => movie.id !== id);
+  //     setFavIds([...favIds, value]);
+  //   }
+  // };
 
-    localStorage.setItem("favMovies", JSON.stringify(updated));
+  const removeFromFav = async (id) => {
+    if (!user) return;
 
-    setFavIds(updated.map((m) => m.id));
+    await deleteDoc(doc(db, "users", user.uid, "favorites", id));
+
+    setFavIds((prev) => prev.filter((movieId) => movieId !== id));
   };
+
+  // const removeFromFav = (id) => {
+  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+
+  //   const updated = favMovies.filter((movie) => movie.id !== id);
+
+  //   localStorage.setItem("favMovies", JSON.stringify(updated));
+
+  //   setFavIds(updated.map((m) => m.id));
+  // };
 
   return (
-    <div className="relative overflow-hidden min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">
+    <div className="relative overflow-hidden min-h-screen w-full bg-slate-950 flex flex-col gap-5">
       {/* background gradient  */}
       <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
       <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
 
       <div className="fixed z-20 flex flex-col items-center gap-5 top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
-        <Header />
+        <Header searchBtn={true} />
       </div>
       {loading ? (
         <div className="flex justify-center items-center mt-20">
           <DetailsLoader />
         </div>
       ) : (
-        <div className="relative z-10 mt-20 flex flex-col items-center px-2 md:px-5">
-          <div className="w-full lg:w-fit h-screen text-white flex flex-col items-start md:flex-row md:justify-center md:gap-5">
+        <div className="relative z-10 mt-20 flex flex-col items-center px-2">
+          <div className="w-full text-white flex flex-col items-start py-5">
             <img
               src={movie.Poster !== "N/A" ? movie.Poster : noPoster}
               onError={(e) => (e.target.src = noPoster)}

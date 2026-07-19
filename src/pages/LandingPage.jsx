@@ -42,7 +42,7 @@ const LandingPage = () => {
           {/* Buttons */}
           <div className="flex flex-wrap gap-4 mt-10">
             <NavLink
-              to="/"
+              to="/login"
               className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-yellow-500 transition text-lg font-semibold shadow-lg shadow-yellow-800/40"
             >
               <Play size={20} />
@@ -53,7 +53,7 @@ const LandingPage = () => {
       </div>
 
       {/* Features */}
-      <div className="relative z-10 px-6 pb-20">
+      <div className="relative z-10 px-6 pb-10">
         <div className="grid gap-6">
           <div className="bg-[#0f172a] border border-gray-800 rounded-3xl p-8 hover:border-purple-500 transition">
             <div className="w-14 h-14 rounded-2xl bg-purple-600/20 flex items-center justify-center mb-5">

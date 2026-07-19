@@ -13,11 +13,16 @@ import {
   topRatedMovies,
   tvShows,
 } from "./data/moviePages";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/landing" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/" element={<Home />} />
       <Route
         path="/action"
@@ -39,6 +44,7 @@ const App = () => {
       />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/movie/:id" element={<MovieDetails />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 };

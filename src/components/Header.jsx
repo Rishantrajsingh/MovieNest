@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { Heart, Search } from "lucide-react";
 
-const Header = () => {
+const Header = ({ searchBtn }) => {
   return (
     <div className="flex justify-between items-center w-full md:px-5">
       <Link to="/">
@@ -10,9 +10,12 @@ const Header = () => {
         </h1>
       </Link>
       <div className="flex items-center justify-center gap-5">
-        <NavLink to="/search">
-          <Search size={30} color="white" />
-        </NavLink>
+        {searchBtn && (
+          <NavLink to="/search">
+            <Search size={30} color="white" />
+          </NavLink>
+        )}
+
         <NavLink to="/favorites">
           <Heart size={30} color="white" />
         </NavLink>
