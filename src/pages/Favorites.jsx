@@ -2,23 +2,30 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import CategoryLoader from "../components/CategoryLoader";
-import apiCache from "../utils/apiCache";
 import { noPoster } from "../constants/imageConstants";
 import { getFavoriteMovies } from "../service/favoritesApi";
+import { collection, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
+import { useFirebase } from "../context/FirebaseContext";
 
 const Favorites = () => {
-  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+  const { user } = useFirebase();
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     const fetchMovies = async () => {
       try {
         setLoading(true);
 
-        const data = await getFavoriteMovies();
+        const data = await getFavoriteMovies(user.uid);
 
         setMovies(data);
       } catch (error) {
@@ -29,23 +36,47 @@ const Favorites = () => {
     };
 
     fetchMovies();
-  }, []);
+  }, [user]);
 
-  const removeFromFav = (id) => {
-    const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+  const removeFromFav = async (id) => {
+    if (!user) return;
 
-    const updated = favMovies.filter((movie) => movie.id !== id);
-
-    localStorage.setItem("favMovies", JSON.stringify(updated));
+    await deleteDoc(doc(db, "users", user.uid, "favorites", id));
 
     setMovies((prev) => prev.filter((movie) => movie.imdbID !== id));
   };
 
-  // clear all favorites
-  const clearAllFavorites = () => {
-    localStorage.removeItem("favMovies");
+  const clearAllFavorites = async () => {
+    if (!user) return;
+
+    const snapshot = await getDocs(
+      collection(db, "users", user.uid, "favorites"),
+    );
+
+    const deletePromises = snapshot.docs.map((docSnap) =>
+      deleteDoc(docSnap.ref),
+    );
+
+    await Promise.all(deletePromises);
+
     setMovies([]);
   };
+
+  // const removeFromFav = (id) => {
+  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+
+  //   const updated = favMovies.filter((movie) => movie.id !== id);
+
+  //   localStorage.setItem("favMovies", JSON.stringify(updated));
+
+  //   setMovies((prev) => prev.filter((movie) => movie.imdbID !== id));
+  // };
+
+  // // clear all favorites
+  // const clearAllFavorites = () => {
+  //   localStorage.removeItem("favMovies");
+  //   setMovies([]);
+  // };
 
   if (movies.length === 0) {
     return (

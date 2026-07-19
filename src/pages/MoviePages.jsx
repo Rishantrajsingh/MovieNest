@@ -29,7 +29,7 @@ const MoviePages = ({ movieNames }) => {
       <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
 
       <div className="fixed z-20 flex flex-col items-center top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
-        <Header />
+        <Header searchBtn={true} />
       </div>
 
       {loading ? (

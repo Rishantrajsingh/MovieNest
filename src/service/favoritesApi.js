@@ -1,20 +1,22 @@
-import apiCache from "../utils/apiCache";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
+import detailsCache from "../utils/detailsCache";
 
 const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = "https://www.omdbapi.com/";
 
-export const getFavoriteMovies = async () => {
-  const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
+export const getFavoriteMovies = async (uid) => {
+  const snapshot = await getDocs(collection(db, "users", uid, "favorites"));
+  console.log(snapshot.docs);
+  const favoriteIds = snapshot.docs.map((doc) => doc.id);
 
-  if (favMovies.length === 0) {
-    return [];
-  }
+  if (favoriteIds.length === 0) return [];
 
-  const requests = favMovies.map((movie) =>
-    apiCache(`${BASE_URL}?i=${movie.id}&apikey=${apiKey}`),
+  const movies = await Promise.all(
+    favoriteIds.map((id) =>
+      detailsCache(`${BASE_URL}?i=${id}&apikey=${apiKey}`, id),
+    ),
   );
 
-  const responses = await Promise.all(requests);
-
-  return responses.filter((movie) => movie && movie.Response !== "False");
+  return movies.filter(Boolean);
 };

@@ -1,12 +1,15 @@
-import apiCache from "../utils/apiCache";
+import movieCache from "../utils/movieCache";
+import searchCache from "../utils/searchCache";
 
 const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = "https://www.omdbapi.com/";
 
 export const getDefaultMovies = async (movieNames) => {
-  console.log(movieNames);
-  const requests = movieNames.map((movie) =>
-    apiCache(`${BASE_URL}?apikey=${apiKey}&t=${encodeURIComponent(movie)}`),
+  const requests = movieNames.map((name) =>
+    movieCache(
+      `${BASE_URL}?apikey=${apiKey}&t=${encodeURIComponent(name)}`,
+      name,
+    ),
   );
 
   const responses = await Promise.all(requests);
@@ -19,11 +22,11 @@ export const getDefaultMovies = async (movieNames) => {
 };
 
 export const getSearchedMovies = async (searchText, pageNumber = 1) => {
-  const res = await apiCache(
-    `${BASE_URL}?apikey=${apiKey}&s=${encodeURIComponent(
-      searchText,
-    )}&page=${pageNumber}`,
-  );
+  const url = `${BASE_URL}?apikey=${apiKey}&s=${encodeURIComponent(
+    searchText,
+  )}&page=${pageNumber}`;
 
-  return res.Search;
+  const data = await searchCache(url, searchText, pageNumber);
+  console.log(data.Search);
+  return data.Search || [];
 };

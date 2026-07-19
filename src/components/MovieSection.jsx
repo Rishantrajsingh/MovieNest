@@ -13,8 +13,8 @@ const MovieSection = ({ movieNames, title, moviePageTitle }) => {
   useEffect(() => {
     const fetchMovies = async () => {
       const data = await getMovies(movieNames);
-      setMovies(data);
       console.log(data);
+      setMovies(data);
     };
 
     fetchMovies();
@@ -28,7 +28,7 @@ const MovieSection = ({ movieNames, title, moviePageTitle }) => {
       >
         {title}
       </NavLink>
-      <div className="flex gap-2 w-full py-2 overflow-auto scrollbar-hide px-3">
+      <div className="flex gap-2 w-full py-2 overflow-auto scrollbar-hide px-2">
         {movies.map((elem, idx) => {
           return (
             <div key={idx} className="flex items-center justify-center rounded">
