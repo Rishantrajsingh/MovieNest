@@ -16,22 +16,38 @@ import {
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/landing" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/" element={<Home />} />
+      <Route
+        path="/home"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/action"
-        element={<MoviePages movieNames={actionReloaded} />}
+        element={
+          <ProtectedRoute>
+            <MoviePages movieNames={actionReloaded} />{" "}
+          </ProtectedRoute>
+        }
       />
       <Route path="/kids" element={<MoviePages movieNames={kidsCorner} />} />
       <Route
         path="/comedy"
-        element={<MoviePages movieNames={comedyFullyLoaded} />}
+        element={
+          <ProtectedRoute>
+            <MoviePages movieNames={comedyFullyLoaded} />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/toprated"

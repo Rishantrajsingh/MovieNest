@@ -20,7 +20,7 @@ const Login = () => {
       //   return;
       // }
 
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }

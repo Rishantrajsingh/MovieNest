@@ -130,7 +130,7 @@ const SearchMovies = ({ movieNames }) => {
 
       {/* SEARCH BAR */}
       <div className="fixed z-20 top-0 left-0 w-full bg-slate-950/10 flex flex-col gap-3 justify-center items-center px-4 py-4 backdrop-blur-lg shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
-        <Header searchBtn={false} />
+        <Header searchBtn={false} favbtn={true} />
         <div className="relative w-full">
           <input
             type="text"

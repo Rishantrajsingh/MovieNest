@@ -1,10 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
-import { Heart, Search } from "lucide-react";
+import { CircleUser, Heart, Search } from "lucide-react";
 
-const Header = ({ searchBtn }) => {
+const Header = ({ searchBtn, favbtn }) => {
   return (
     <div className="flex justify-between items-center w-full md:px-5">
-      <Link to="/">
+      <Link to="/home">
         <h1 className="text-4xl font-bold text-white">
           Movie<span className="text-yellow-400">Nest</span>
         </h1>
@@ -16,8 +16,14 @@ const Header = ({ searchBtn }) => {
           </NavLink>
         )}
 
-        <NavLink to="/favorites">
-          <Heart size={30} color="white" />
+        {favbtn && (
+          <NavLink to="/favorites">
+            <Heart size={30} color="white" />
+          </NavLink>
+        )}
+
+        <NavLink to="/profile">
+          <CircleUser size={30} color="white" />
         </NavLink>
       </div>
     </div>

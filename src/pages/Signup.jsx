@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { useFirebase } from "../context/FirebaseContext";
 import { useState } from "react";
@@ -7,6 +7,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const { signUpUser, signInWithGoogle } = useFirebase();
 
@@ -15,6 +16,16 @@ const Signup = () => {
     try {
       await signUpUser(name, email, password);
       console.log("success");
+      navigate("/home");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    try {
+      await signInWithGoogle();
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }
@@ -92,7 +103,7 @@ const Signup = () => {
 
         {/* Google Signup */}
         <button
-          onClick={signInWithGoogle}
+          onClick={handleGoogleSignup}
           className="w-full flex items-center justify-center gap-3 border border-zinc-700 hover:bg-zinc-800 transition py-3 rounded-lg text-white"
         >
           <FaGoogle />

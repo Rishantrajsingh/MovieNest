@@ -1,23 +1,47 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaHeart, FaSignOutAlt } from "react-icons/fa";
 import { useFirebase } from "../context/FirebaseContext";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 const Profile = () => {
-  const { user } = useFirebase();
+  const { user, logoutUser } = useFirebase();
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getUserData = async () => {
+      if (!user) return;
+
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setUserData(docSnap.data());
+      }
+    };
+    getUserData();
+  }, [user]);
+
+  const handleLogout = async () => {
+    await logoutUser();
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-zinc-900 rounded-2xl border border-zinc-800 shadow-xl p-8">
         {/* Avatar */}
-        {/* <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <FaUserCircle className="text-8xl text-red-500" />
 
           <h1 className="text-3xl font-bold text-white mt-4">
             {user?.displayName || "Movie Lover"}
           </h1>
 
-          <p className="text-zinc-400 mt-2">{user.email}</p>
-        </div> */}
+          <p className="text-zinc-400 mt-2">{user?.email}</p>
+        </div>
 
         {/* Divider */}
         <div className="border-t border-zinc-800 my-8"></div>
@@ -36,7 +60,10 @@ const Profile = () => {
         </Link>
 
         {/* Logout */}
-        <button className="w-full mt-6 flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 transition py-3 rounded-xl text-white font-semibold">
+        <button
+          onClick={handleLogout}
+          className="w-full mt-6 flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 transition py-3 rounded-xl text-white font-semibold"
+        >
           <FaSignOutAlt />
           Logout
         </button>
