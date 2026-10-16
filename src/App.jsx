@@ -16,7 +16,6 @@ import {
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
@@ -24,30 +23,15 @@ const App = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/home" element={<Home />} />
       <Route
         path="/action"
-        element={
-          <ProtectedRoute>
-            <MoviePages movieNames={actionReloaded} />{" "}
-          </ProtectedRoute>
-        }
+        element={<MoviePages movieNames={actionReloaded} />}
       />
       <Route path="/kids" element={<MoviePages movieNames={kidsCorner} />} />
       <Route
         path="/comedy"
-        element={
-          <ProtectedRoute>
-            <MoviePages movieNames={comedyFullyLoaded} />
-          </ProtectedRoute>
-        }
+        element={<MoviePages movieNames={comedyFullyLoaded} />}
       />
       <Route
         path="/toprated"

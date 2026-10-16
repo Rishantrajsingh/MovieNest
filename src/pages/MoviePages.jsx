@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,7 @@ const MoviePages = ({ movieNames }) => {
     };
 
     fetchMovies();
-  }, []);
+  }, [movieNames]);
 
   return (
     <div className="relative overflow-hidden min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5">

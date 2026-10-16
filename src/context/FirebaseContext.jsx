@@ -1,109 +1,57 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../firebase/firebaseConfig";
+
 import {
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
-  sendEmailVerification,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
-import { create } from "framer-motion/m";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig";
 
-const FirebaseContext = createContext();
+import { auth } from "../firebase/firebaseConfig";
+
+const FirebaseContext = createContext(null);
 
 const googleProvider = new GoogleAuthProvider();
 
-// const isStrongPassword = (password) => {
-//   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-//   return regex.test(password);
-// };
-
-//** SIGNUP USER */
-
-const signUpUser = async (name, email, password) => {
-  // if (!isStrongPassword(password)) {
-  //   throw new Error(
-  //     "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.",
-  //   );
-  // }
-
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password,
-  );
-
-  const user = userCredential.user;
-
-  await updateProfile(user, {
-    displayName: name,
-  });
-
-  await setDoc(doc(db, "users", user.uid), {
-    name,
-    email,
-  });
-
-  return user;
-};
-
-// ** LOGIN USER
-
-const signInUser = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
-};
-
-// ** CONTINUE WITH GOOGLE
-
-const signInWithGoogle = async () => {
-  // return signInWithPopup(auth, googleProvider);
-  const userCredential = await signInWithPopup(auth, googleProvider);
-
-  const user = userCredential.user;
-
-  const docRef = doc(db, "users", user.uid);
-  const docSnap = await getDoc(docRef);
-
-  // Sirf pehli baar save hoga
-  if (!docSnap.exists()) {
-    await setDoc(docRef, {
-      name: user.displayName,
-      email: user.email,
-      provider: "google",
-    });
-  }
-
-  return userCredential;
-};
-
-// ** LOGOUT USER
-
-const logoutUser = async () => {
-  return await signOut(auth);
-};
-
-// ** FIREBASE PROVIDER
-
 export const FirebaseProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // Google login
+  const signInWithGoogle = async () => {
+    await setPersistence(auth, browserLocalPersistence);
+
+    return await signInWithPopup(auth, googleProvider);
+  };
+
+  // Logout
+  const logoutUser = async () => {
+    await signOut(auth);
+  };
+
+  // Track login status
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (currentUser) => {
+        setUser(currentUser);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Authentication state error:", error);
+        setLoading(false);
+      },
+    );
+
     return unsubscribe;
   }, []);
 
   const value = {
-    signUpUser,
-    signInUser,
-    signInWithGoogle,
     user,
+    loading,
+    signInWithGoogle,
     logoutUser,
   };
 
@@ -114,6 +62,12 @@ export const FirebaseProvider = ({ children }) => {
   );
 };
 
-// ** CUSTOM HOOK
+export const useFirebase = () => {
+  const context = useContext(FirebaseContext);
 
-export const useFirebase = () => useContext(FirebaseContext);
+  if (!context) {
+    throw new Error("useFirebase must be used inside FirebaseProvider");
+  }
+
+  return context;
+};

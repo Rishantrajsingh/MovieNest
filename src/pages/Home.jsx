@@ -1,5 +1,4 @@
-import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import HomeLoader from "../components/HomeLoader";
 import Header from "../components/Header";
 import MovieSection from "../components/MovieSection";
@@ -15,14 +14,16 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setLoading(false);
     }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5 overflow-hidden ">
-      {/* background gradient  */}
+    <div className="relative min-h-screen w-full py-5 bg-slate-950 flex flex-col gap-5 overflow-hidden">
+      {/* Background gradient */}
       <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
       <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
 
@@ -39,7 +40,7 @@ const Home = () => {
           <div className="w-full h-fit overflow-hidden bg-slate-950 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
             <img
               src="/images/homebanner.png"
-              alt="could not load image"
+              alt="MovieNest home banner"
               className="w-full h-fit object-cover shrink-0"
             />
           </div>
@@ -50,21 +51,25 @@ const Home = () => {
               title="Action Reloaded"
               moviePageTitle="action"
             />
+
             <MovieSection
               movieNames={kidsCartoons}
               title="Kid's Corner"
               moviePageTitle="kids"
             />
+
             <MovieSection
               movieNames={comedyMovies}
               title="Comedy Fully Loaded"
               moviePageTitle="comedy"
             />
+
             <MovieSection
               movieNames={topRatedMovies}
               title="Top Rated Movies"
               moviePageTitle="toprated"
             />
+
             <MovieSection
               movieNames={mixedTvShows}
               title="Tv Show's"
@@ -76,4 +81,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;

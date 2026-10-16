@@ -1,44 +1,63 @@
 import axios from "axios";
-import { db } from "../firebase/firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 
-const database = db;
+const CACHE_DURATION = 24 * 60 * 60 * 1000;
+const CACHE_PREFIX = "movienest_movie_cache_";
 
 const movieCache = async (url, movieName) => {
+  const cacheKey = `${CACHE_PREFIX}${String(movieName || url)
+    .trim()
+    .toLowerCase()}`;
+
+  // Read cached movie data from localStorage
   try {
-    const docRef = doc(database, "movies", movieName);
-    const docSnap = await getDoc(docRef);
+    const cachedItem = localStorage.getItem(cacheKey);
 
-    const cacheTime = 24 * 60 * 60 * 1000;
+    if (cachedItem) {
+      const cached = JSON.parse(cachedItem);
+      const isExpired =
+        !cached.cachedAt || Date.now() - cached.cachedAt > CACHE_DURATION;
 
-    if (docSnap.exists()) {
-      const cachedData = docSnap.data();
-      const cachedAt = docSnap.data().cachedAt;
-
-      const isExpired = Date.now() - cachedAt > cacheTime;
-
-      if (!isExpired) {
-        console.log("Caching");
-        return cachedData;
+      if (!isExpired && cached.data) {
+        console.log("Movie cache hit:", movieName);
+        return cached.data;
       }
 
-      console.log("cache expired");
+      localStorage.removeItem(cacheKey);
+      console.log("Movie cache expired:", movieName);
     } else {
-      console.log("cache miss");
+      console.log("Movie cache miss:", movieName);
+    }
+  } catch (error) {
+    console.warn("Could not read movie cache:", error);
+  }
+
+  // Fetch fresh data from the API
+  try {
+    const response = await axios.get(url);
+    const movieData = response.data;
+
+    if (!movieData || movieData.Response === "False") {
+      return movieData;
     }
 
-    const response = await axios.get(url);
-
-    const movieData = {
-      ...response.data,
-      cachedAt: Date.now(),
-    };
-
-    await setDoc(docRef, movieData);
+    // Save movie data locally for 24 hours
+    try {
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data: movieData,
+          cachedAt: Date.now(),
+        }),
+      );
+    } catch (error) {
+      // App still works if localStorage is full or unavailable
+      console.warn("Could not save movie cache:", error);
+    }
 
     return movieData;
   } catch (error) {
-    console.log("Error while caching", error);
+    console.error("Error fetching movie data:", error);
+    throw error;
   }
 };
 

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
@@ -6,110 +5,199 @@ import DetailsLoader from "./DetailsLoader";
 import { getMovieDetails } from "../service/movieDetailsApi";
 import { noPoster } from "../constants/imageConstants";
 import { useFirebase } from "../context/FirebaseContext";
-import {
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-  deleteDoc,
-} from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig";
 
 const MovieDetails = () => {
   const { user } = useFirebase();
-
   const { id } = useParams();
-  const [movie, setMovie] = useState([]);
+
+  const [movie, setMovie] = useState({});
   const [favIds, setFavIds] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
+  // Fetch movie details
   useEffect(() => {
+    let isMounted = true;
+
     const fetchDetails = async () => {
-      const data = await getMovieDetails(id);
-      setMovie(data);
-      setLoading(false);
+      setLoading(true);
+
+      try {
+        const data = await getMovieDetails(id);
+
+        if (isMounted) {
+          setMovie(data || {});
+        }
+      } catch (error) {
+        console.error("Failed to fetch movie details:", error);
+
+        if (isMounted) {
+          setMovie({});
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
+
     fetchDetails();
-  }, []);
 
-  // useEffect(() => {
-  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-  //   const ids = favMovies.map((m) => m.id);
-  //   setFavIds(ids);
-  // }, []);
-
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      if (!user) return;
-
-      const snapshot = await getDocs(
-        collection(db, "users", user.uid, "favorites"),
-      );
-      const ids = snapshot.docs.map((doc) => doc.id);
-      setFavIds(ids);
+    return () => {
+      isMounted = false;
     };
-    fetchFavorites();
+  }, [id]);
+
+  // Load favorites from localStorage
+  useEffect(() => {
+    if (!user) {
+      setFavIds([]);
+      return;
+    }
+
+    try {
+      const storageKey = `movienest_favorites_${user.uid}`;
+      const savedFavorites = JSON.parse(
+        localStorage.getItem(storageKey) || "[]",
+      );
+
+      if (!Array.isArray(savedFavorites)) {
+        setFavIds([]);
+        return;
+      }
+
+      const ids = savedFavorites
+        .map((item) =>
+          typeof item === "string" ? item : item?.imdbID || item?.id,
+        )
+        .filter(Boolean);
+
+      setFavIds([...new Set(ids)]);
+    } catch (error) {
+      console.error("Failed to load favorites:", error);
+      setFavIds([]);
+    }
   }, [user]);
 
-  const addToFav = async (id) => {
-    if (!user) return;
+  // Add movie to favorites
+  const addToFav = (movieToAdd) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
-    await setDoc(doc(db, "users", user.uid, "favorites", id), {
-      id: id,
-    });
+    if (!movieToAdd?.imdbID) {
+      return;
+    }
 
-    setFavIds((prev) => [...prev, id]);
+    try {
+      const storageKey = `movienest_favorites_${user.uid}`;
+      const savedFavorites = JSON.parse(
+        localStorage.getItem(storageKey) || "[]",
+      );
+
+      const favorites = Array.isArray(savedFavorites) ? savedFavorites : [];
+
+      const alreadyExists = favorites.some((item) => {
+        const favoriteId =
+          typeof item === "string" ? item : item?.imdbID || item?.id;
+
+        return favoriteId === movieToAdd.imdbID;
+      });
+
+      if (!alreadyExists) {
+        const updatedFavorites = [
+          ...favorites.filter(
+            (item) => typeof item === "object" && item !== null,
+          ),
+          movieToAdd,
+        ];
+
+        localStorage.setItem(storageKey, JSON.stringify(updatedFavorites));
+      }
+
+      setFavIds((prev) =>
+        prev.includes(movieToAdd.imdbID) ? prev : [...prev, movieToAdd.imdbID],
+      );
+    } catch (error) {
+      console.error("Failed to add favorite:", error);
+      alert("Could not save this favorite. Please try again.");
+    }
   };
 
-  // const addToFav = (value) => {
-  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-  //   const exists = favMovies.some((movie) => movie.id === value);
-  //   if (!exists) {
-  //     const updated = [...favMovies, { id: value }];
-  //     localStorage.setItem("favMovies", JSON.stringify(updated));
+  // Remove movie from favorites
+  const removeFromFav = (movieId) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
-  //     setFavIds([...favIds, value]);
-  //   }
-  // };
+    try {
+      const storageKey = `movienest_favorites_${user.uid}`;
+      const savedFavorites = JSON.parse(
+        localStorage.getItem(storageKey) || "[]",
+      );
 
-  const removeFromFav = async (id) => {
-    if (!user) return;
+      const favorites = Array.isArray(savedFavorites) ? savedFavorites : [];
 
-    await deleteDoc(doc(db, "users", user.uid, "favorites", id));
+      const updatedFavorites = favorites.filter((item) => {
+        const favoriteId =
+          typeof item === "string" ? item : item?.imdbID || item?.id;
 
-    setFavIds((prev) => prev.filter((movieId) => movieId !== id));
+        return favoriteId !== movieId;
+      });
+
+      localStorage.setItem(storageKey, JSON.stringify(updatedFavorites));
+
+      setFavIds((prev) => prev.filter((favoriteId) => favoriteId !== movieId));
+    } catch (error) {
+      console.error("Failed to remove favorite:", error);
+      alert("Could not remove this favorite. Please try again.");
+    }
   };
 
-  // const removeFromFav = (id) => {
-  //   const favMovies = JSON.parse(localStorage.getItem("favMovies")) || [];
-
-  //   const updated = favMovies.filter((movie) => movie.id !== id);
-
-  //   localStorage.setItem("favMovies", JSON.stringify(updated));
-
-  //   setFavIds(updated.map((m) => m.id));
-  // };
+  const isFavorite = movie?.imdbID ? favIds.includes(movie.imdbID) : false;
 
   return (
     <div className="relative overflow-hidden min-h-screen w-full bg-slate-950 flex flex-col gap-5">
-      {/* background gradient  */}
+      {/* Background gradient */}
       <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
       <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
 
       <div className="fixed z-20 flex flex-col items-center gap-5 top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
         <Header searchBtn={true} />
       </div>
+
       {loading ? (
         <div className="flex justify-center items-center mt-20">
           <DetailsLoader />
+        </div>
+      ) : !movie?.imdbID ? (
+        <div className="relative z-10 mt-32 flex flex-col items-center px-4 text-center text-white">
+          <h1 className="text-xl font-bold mb-2">Movie details unavailable</h1>
+          <p className="text-gray-400">
+            Could not load this movie. Please try again.
+          </p>
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-5 bg-white text-black px-5 py-2 rounded-lg font-semibold hover:bg-gray-200"
+          >
+            Go Back
+          </button>
         </div>
       ) : (
         <div className="relative z-10 mt-20 flex flex-col items-center px-2">
           <div className="w-full text-white flex flex-col items-start py-5">
             <img
-              src={movie.Poster !== "N/A" ? movie.Poster : noPoster}
-              onError={(e) => (e.target.src = noPoster)}
+              src={
+                movie.Poster && movie.Poster !== "N/A" ? movie.Poster : noPoster
+              }
+              alt={movie.Title || "Movie poster"}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = noPoster;
+              }}
               className="w-full h-full rounded-lg mb-4"
             />
 
@@ -117,44 +205,48 @@ const MovieDetails = () => {
               <h1 className="text-2xl font-bold mb-2">{movie.Title}</h1>
 
               <div className="text-sm text-gray-400 mb-3">
-                <p>Year: {movie.Year}</p>
-                <p>Genre: {movie.Genre}</p>
-                <p>Runtime: {movie.Runtime}</p>
+                <p>Year: {movie.Year || "N/A"}</p>
+                <p>Genre: {movie.Genre || "N/A"}</p>
+                <p>Runtime: {movie.Runtime || "N/A"}</p>
               </div>
 
               <p className="text-yellow-400 font-semibold mb-4">
-                ⭐ {movie.imdbRating} / 10
+                ⭐ {movie.imdbRating || "N/A"} / 10
               </p>
 
               <div className="mb-4">
                 <h2 className="text-lg font-semibold mb-1">Plot</h2>
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  {movie.Plot}
+                  {movie.Plot || "Plot not available."}
                 </p>
               </div>
 
               <p className="text-sm mb-1">
                 <span className="font-semibold">Director:</span>{" "}
-                {movie.Director}
+                {movie.Director || "N/A"}
               </p>
 
               <p className="text-sm mb-4">
-                <span className="font-semibold">Actors:</span> {movie.Actors}
+                <span className="font-semibold">Actors:</span>{" "}
+                {movie.Actors || "N/A"}
               </p>
 
               <button
                 onClick={() => {
-                  if (favIds.includes(movie.imdbID)) {
+                  if (!user) {
+                    navigate("/login");
+                    return;
+                  }
+
+                  if (isFavorite) {
                     removeFromFav(movie.imdbID);
                   } else {
-                    addToFav(movie.imdbID);
+                    addToFav(movie);
                   }
                 }}
                 className="w-full bg-white hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
               >
-                {favIds.includes(movie.imdbID)
-                  ? "💔 Remove from Fav"
-                  : "❤️ Add to Favorites"}
+                {isFavorite ? "💔 Remove from Fav" : "❤️ Add to Favorites"}
               </button>
             </div>
           </div>
@@ -163,4 +255,5 @@ const MovieDetails = () => {
     </div>
   );
 };
+
 export default MovieDetails;
