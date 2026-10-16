@@ -4,6 +4,8 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   setPersistence,
   browserLocalPersistence,
@@ -12,40 +14,65 @@ import {
 import { auth } from "../firebase/firebaseConfig";
 
 const FirebaseContext = createContext(null);
-
 const googleProvider = new GoogleAuthProvider();
 
 export const FirebaseProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Google login
   const signInWithGoogle = async () => {
     await setPersistence(auth, browserLocalPersistence);
 
+    // Mobile browser detection
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      await signInWithRedirect(auth, googleProvider);
+      return;
+    }
+
+    // Desktop browser
     return await signInWithPopup(auth, googleProvider);
   };
 
-  // Logout
   const logoutUser = async () => {
     await signOut(auth);
   };
 
-  // Track login status
   useEffect(() => {
+    let active = true;
+
+    const checkRedirect = async () => {
+      try {
+        await getRedirectResult(auth);
+      } catch (error) {
+        console.error("Google redirect login error:", error);
+      }
+    };
+
+    checkRedirect();
+
     const unsubscribe = onAuthStateChanged(
       auth,
       (currentUser) => {
-        setUser(currentUser);
-        setLoading(false);
+        if (active) {
+          setUser(currentUser);
+          setLoading(false);
+        }
       },
       (error) => {
         console.error("Authentication state error:", error);
-        setLoading(false);
+
+        if (active) {
+          setLoading(false);
+        }
       },
     );
 
-    return unsubscribe;
+    return () => {
+      active = false;
+      unsubscribe();
+    };
   }, []);
 
   const value = {
