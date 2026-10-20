@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { CircleUser, Heart, Search } from "lucide-react";
+import { Heart, Search } from "lucide-react";
 
 const Header = ({ searchBtn, favbtn }) => {
   return (
@@ -30,14 +30,6 @@ const Header = ({ searchBtn, favbtn }) => {
             <Heart size={30} color="white" />
           </NavLink>
         )}
-
-        <NavLink
-          to="/profile"
-          aria-label="My profile"
-          className="transition-transform hover:scale-110"
-        >
-          <CircleUser size={30} color="white" />
-        </NavLink>
       </div>
     </div>
   );

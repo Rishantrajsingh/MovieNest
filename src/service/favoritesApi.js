@@ -2,13 +2,11 @@ import detailsCache from "../utils/detailsCache";
 
 const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = "https://www.omdbapi.com/";
+const FAVORITES_KEY = "movienest_favorites";
 
-export const getFavoriteMovies = async (uid) => {
-  if (!uid) return [];
-
+export const getFavoriteMovies = async () => {
   try {
-    const storageKey = `movienest_favorites_${uid}`;
-    const savedFavorites = localStorage.getItem(storageKey);
+    const savedFavorites = localStorage.getItem(FAVORITES_KEY);
 
     if (!savedFavorites) return [];
 
@@ -18,12 +16,12 @@ export const getFavoriteMovies = async (uid) => {
       return [];
     }
 
-    // Already-saved movie objects
+    // Favorites already stored as complete movie objects
     const savedMovies = favorites.filter(
       (item) => typeof item === "object" && item !== null,
     );
 
-    // Older format: favorite movie IDs
+    // Support older format where only movie IDs were stored
     const favoriteIds = favorites.filter((item) => typeof item === "string");
 
     const fetchedMovies = await Promise.all(
@@ -35,7 +33,10 @@ export const getFavoriteMovies = async (uid) => {
       ),
     );
 
-    return [...savedMovies, ...fetchedMovies.filter(Boolean)];
+    return [
+      ...savedMovies,
+      ...fetchedMovies.filter((movie) => movie && movie.Response !== "False"),
+    ];
   } catch (error) {
     console.error("Failed to load favorite movies:", error);
     return [];

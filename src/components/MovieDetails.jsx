@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import Header from "./Header";
 import DetailsLoader from "./DetailsLoader";
 import { getMovieDetails } from "../service/movieDetailsApi";
 import { noPoster } from "../constants/imageConstants";
-import { useFirebase } from "../context/FirebaseContext";
+
+const FAVORITES_KEY = "movienest_favorites";
 
 const MovieDetails = () => {
-  const { user } = useFirebase();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [movie, setMovie] = useState({});
   const [favIds, setFavIds] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const navigate = useNavigate();
 
   // Fetch movie details
   useEffect(() => {
@@ -51,15 +51,9 @@ const MovieDetails = () => {
 
   // Load favorites from localStorage
   useEffect(() => {
-    if (!user) {
-      setFavIds([]);
-      return;
-    }
-
     try {
-      const storageKey = `movienest_favorites_${user.uid}`;
       const savedFavorites = JSON.parse(
-        localStorage.getItem(storageKey) || "[]",
+        localStorage.getItem(FAVORITES_KEY) || "[]",
       );
 
       if (!Array.isArray(savedFavorites)) {
@@ -78,23 +72,15 @@ const MovieDetails = () => {
       console.error("Failed to load favorites:", error);
       setFavIds([]);
     }
-  }, [user]);
+  }, []);
 
   // Add movie to favorites
   const addToFav = (movieToAdd) => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    if (!movieToAdd?.imdbID) {
-      return;
-    }
+    if (!movieToAdd?.imdbID) return;
 
     try {
-      const storageKey = `movienest_favorites_${user.uid}`;
       const savedFavorites = JSON.parse(
-        localStorage.getItem(storageKey) || "[]",
+        localStorage.getItem(FAVORITES_KEY) || "[]",
       );
 
       const favorites = Array.isArray(savedFavorites) ? savedFavorites : [];
@@ -114,7 +100,7 @@ const MovieDetails = () => {
           movieToAdd,
         ];
 
-        localStorage.setItem(storageKey, JSON.stringify(updatedFavorites));
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(updatedFavorites));
       }
 
       setFavIds((prev) =>
@@ -128,15 +114,9 @@ const MovieDetails = () => {
 
   // Remove movie from favorites
   const removeFromFav = (movieId) => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
     try {
-      const storageKey = `movienest_favorites_${user.uid}`;
       const savedFavorites = JSON.parse(
-        localStorage.getItem(storageKey) || "[]",
+        localStorage.getItem(FAVORITES_KEY) || "[]",
       );
 
       const favorites = Array.isArray(savedFavorites) ? savedFavorites : [];
@@ -148,7 +128,7 @@ const MovieDetails = () => {
         return favoriteId !== movieId;
       });
 
-      localStorage.setItem(storageKey, JSON.stringify(updatedFavorites));
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(updatedFavorites));
 
       setFavIds((prev) => prev.filter((favoriteId) => favoriteId !== movieId));
     } catch (error) {
@@ -162,11 +142,11 @@ const MovieDetails = () => {
   return (
     <div className="relative overflow-hidden min-h-screen w-full bg-slate-950 flex flex-col gap-5">
       {/* Background gradient */}
-      <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0"></div>
-      <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0"></div>
+      <div className="fixed top-0 left-0 w-125 h-125 bg-purple-700/20 blur-3xl rounded-full z-0" />
+      <div className="fixed bottom-0 right-0 w-100 h-100 bg-pink-600/20 blur-3xl rounded-full z-0" />
 
       <div className="fixed z-20 flex flex-col items-center gap-5 top-0 left-0 bg-slate-950/10 w-full py-5 px-4 backdrop-blur-lg rounded shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
-        <Header searchBtn={true} />
+        <Header searchBtn={true} favbtn={true} />
       </div>
 
       {loading ? (
@@ -176,9 +156,11 @@ const MovieDetails = () => {
       ) : !movie?.imdbID ? (
         <div className="relative z-10 mt-32 flex flex-col items-center px-4 text-center text-white">
           <h1 className="text-xl font-bold mb-2">Movie details unavailable</h1>
+
           <p className="text-gray-400">
             Could not load this movie. Please try again.
           </p>
+
           <button
             onClick={() => navigate(-1)}
             className="mt-5 bg-white text-black px-5 py-2 rounded-lg font-semibold hover:bg-gray-200"
@@ -216,6 +198,7 @@ const MovieDetails = () => {
 
               <div className="mb-4">
                 <h2 className="text-lg font-semibold mb-1">Plot</h2>
+
                 <p className="text-gray-300 text-sm leading-relaxed">
                   {movie.Plot || "Plot not available."}
                 </p>
@@ -232,18 +215,9 @@ const MovieDetails = () => {
               </p>
 
               <button
-                onClick={() => {
-                  if (!user) {
-                    navigate("/login");
-                    return;
-                  }
-
-                  if (isFavorite) {
-                    removeFromFav(movie.imdbID);
-                  } else {
-                    addToFav(movie);
-                  }
-                }}
+                onClick={() =>
+                  isFavorite ? removeFromFav(movie.imdbID) : addToFav(movie)
+                }
                 className="w-full bg-white hover:bg-red-600 transition-colors py-2 rounded-lg font-semibold text-black"
               >
                 {isFavorite ? "💔 Remove from Fav" : "❤️ Add to Favorites"}

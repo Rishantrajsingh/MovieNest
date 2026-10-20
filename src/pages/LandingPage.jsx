@@ -18,7 +18,6 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-6 pb-20 gap-14">
-        {/* Left */}
         <motion.div
           initial={{ opacity: 0, x: -60 }}
           animate={{ opacity: 1, x: 0 }}
@@ -39,11 +38,11 @@ const LandingPage = () => {
             into a cinematic universe built for movie lovers.
           </p>
 
-          {/* Buttons */}
+          {/* Browse Movies Button */}
           <div className="flex flex-wrap gap-4 mt-10">
             <NavLink
-              to="/login"
-              className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-yellow-500 transition text-lg font-semibold shadow-lg shadow-yellow-800/40"
+              to="/home"
+              className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-yellow-500 transition text-lg font-semibold shadow-lg shadow-yellow-800/40 hover:bg-yellow-400"
             >
               <Play size={20} />
               Browse Movies
